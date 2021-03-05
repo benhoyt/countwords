@@ -12,24 +12,25 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanWords)
 	counts := make(map[string]int)
 	for scanner.Scan() {
-		line := strings.ToLower(scanner.Text())
-		for _, word := range strings.Fields(line) {
-			counts[word]++
-		}
+		word := strings.ToLower(scanner.Text())
+		counts[word]++
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	ordered := make([]Count, 0, len(counts))
+
+	var ordered []Count
 	for word, count := range counts {
 		ordered = append(ordered, Count{word, count})
 	}
 	sort.Slice(ordered, func(i, j int) bool {
 		return ordered[i].count > ordered[j].count
 	})
+
 	for _, count := range ordered {
 		fmt.Printf("%s %d\n", count.word, count.count)
 	}

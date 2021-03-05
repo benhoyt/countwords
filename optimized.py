@@ -8,12 +8,12 @@ while True:
     if not chunk:
         break
     chunk = remaining + chunk
-    last_eol = chunk.rfind(b'\n')
-    if last_eol == -1:
+    last_lf = chunk.rfind(b'\n')
+    if last_lf == -1:
         remaining = ''
     else:
-        remaining = chunk[last_eol+1:]
-        chunk = chunk[:last_eol]
+        remaining = chunk[last_lf+1:]
+        chunk = chunk[:last_lf]
     counts.update(chunk.lower().split())
 
 for word, count in counts.most_common():
