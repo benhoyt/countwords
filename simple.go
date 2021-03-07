@@ -1,5 +1,3 @@
-// Print frequencies of unique words in text file, most frequent first
-
 package main
 
 import (

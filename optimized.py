@@ -2,13 +2,13 @@ import collections
 import sys
 
 counts = collections.Counter()
-remaining = b''
+remaining = ''
 while True:
-    chunk = sys.stdin.buffer.read(64*1024)
+    chunk = sys.stdin.read(64*1024)
     if not chunk:
         break
     chunk = remaining + chunk
-    last_lf = chunk.rfind(b'\n')
+    last_lf = chunk.rfind('\n')
     if last_lf == -1:
         remaining = ''
     else:
@@ -17,4 +17,4 @@ while True:
     counts.update(chunk.lower().split())
 
 for word, count in counts.most_common():
-    print(word.decode('utf-8'), count)
+    print(word, count)
