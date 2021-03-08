@@ -26,15 +26,15 @@ func main() {
 		ordered = append(ordered, Count{word, count})
 	}
 	sort.Slice(ordered, func(i, j int) bool {
-		return ordered[i].count > ordered[j].count
+		return ordered[i].Count > ordered[j].Count
 	})
 
 	for _, count := range ordered {
-		fmt.Printf("%s %d\n", count.word, count.count)
+		fmt.Println(string(count.Word), count.Count)
 	}
 }
 
 type Count struct {
-	word  string
-	count int
+	Word  string
+	Count int
 }
