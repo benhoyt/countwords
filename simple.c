@@ -21,8 +21,8 @@ int cmp_count(const void* p1, const void* p2) {
 }
 
 int main() {
-    // The hcreate hash table doesn't provide a way to iterate, so we need to
-    // store the words in an array too.
+    // The hcreate hash table doesn't provide a way to iterate, so
+    // store the words in an array too (also used for sorting).
     count* words = calloc(MAX_UNIQUES, sizeof(count));
     int num_words = 0;
 
@@ -34,16 +34,15 @@ int main() {
 
     char word[101]; // 100-char word plus NUL byte
     while (scanf("%100s", word) != EOF) {
-        // Convert to lowercase in place.
+        // Convert word to lower case in place.
         for (char* p = word; *p; p++) {
             *p = tolower(*p);
         }
 
         // Search for word in hash table.
-        ENTRY item;
-        item.key = word;
+        ENTRY item = {word, NULL};
         ENTRY* found = hsearch(item, FIND);
-        if (found) {
+        if (found != NULL) {
             // Word already in table, increment count.
             int* pn = (int*)found->data;
             (*pn)++;
@@ -63,7 +62,7 @@ int main() {
             item.data = pn;
             ENTRY* entered = hsearch(item, ENTER);
             if (entered == NULL) {
-                fprintf(stderr, "hash table full, increase MAX_UNIQUES\n");
+                fprintf(stderr, "table full, increase MAX_UNIQUES\n");
                 return 1;
             }
 
@@ -75,11 +74,10 @@ int main() {
 
     // Iterate once to add counts to words list, then sort.
     for (int i = 0; i < num_words; i++) {
-        ENTRY item;
-        item.key = words[i].word;
+        ENTRY item = {words[i].word, NULL};
         ENTRY* found = hsearch(item, FIND);
         if (found == NULL) { // shouldn't happen
-            fprintf(stderr, "didn't find key when iterating: %s\n", item.key);
+            fprintf(stderr, "key not found: %s\n", item.key);
             return 1;
         }
         words[i].count = *(int*)found->data;
