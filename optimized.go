@@ -32,6 +32,8 @@ func main() {
 			toProcess = chunk[:lastLF]
 		}
 
+        // TODO: reorder Go one the same way as C -- simpler and seems faster
+
 		// Loop through toProcess slice and count words.
 		start := -1 // start -1 means in whitespace run
 		for i, c := range toProcess {
@@ -42,14 +44,14 @@ func main() {
 			}
 			if start >= 0 {
 				// In a word, look for end of word (whitespace).
-				if c == ' ' || c == '\n' {
+				if c <= ' ' {
 					// Count this word!
 					increment(counts, toProcess[start:i])
 					start = -1
 				}
 			} else {
 				// In whitespace, look for start of word (non-whitespace).
-				if c != ' ' && c != '\n' {
+				if c > ' ' {
 					start = i
 				}
 			}

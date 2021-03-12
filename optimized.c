@@ -85,7 +85,7 @@ int main() {
         int space;
         for (space = offset+num_read-1; space>=0; space--) {
             char c = buf[space];
-            if (c == ' ' || c == '\n') {
+            if (c <= ' ') {
                 break;
             }
         }
@@ -97,7 +97,7 @@ int main() {
             // Skip whitespace before word.
             for (; i < num_process; i++) {
                 char c = buf[i];
-                if (c != ' ' && c != '\n') {
+                if (c > ' ') {
                     break;
                 }
             }
@@ -106,7 +106,7 @@ int main() {
             int start = i;
             for (; i < num_process; i++) {
                 char c = buf[i];
-                if (c == ' ' || c == '\n') {
+                if (c <= ' ') {
                     break;
                 }
                 if (c >= 'A' && c <= 'Z') {
