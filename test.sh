@@ -13,35 +13,47 @@ python3 optimized.py <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Go simple
-go run simple.go <kjvbible_x10.txt | python3 normalize.py >output.txt
+go build -o simple-go simple.go
+./simple-go <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Go optimized
-go run optimized.go <kjvbible_x10.txt | python3 normalize.py >output.txt
+go build -o optimized-go optimized.go
+./optimized-go <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo C++ simple
 g++ -O2 simple.cpp -o simple-cpp
 ./simple-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
-rm simple-cpp
 
 echo C++ optimized
 g++ -O2 optimized.cpp -o optimized-cpp
 ./optimized-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
-rm optimized-cpp
 
 echo C simple
 gcc -O2 simple.c -o simple-c
 ./simple-c <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
-rm simple-c
+
+echo C optimized
+gcc -O2 optimized.c -o optimized-c
+./optimized-c <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
 
 echo AWK simple
 gawk -f simple.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo AWK optimized
-gawk -b -f optimized.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
+mawk -f optimized.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Forth simple
+../gforth/gforth simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Unix shell
+bash simple.sh <kjvbible_x10.txt | awk '{ print $2, $1 }' | python3 normalize.py >output.txt
 git diff --exit-code output.txt
