@@ -1,13 +1,13 @@
 
 200 constant max-line
-create line max-line allot        \ Buffer for read-line
-wordlist constant counts          \ Hash table of words to count
+create line max-line allot  \ Buffer for read-line
+wordlist constant counts    \ Hash table of words to count
 variable num-uniques  0 num-uniques !
 
 \ Allocate space for new string and copy bytes, return new string.
 : copy-string ( addr u -- addr' u )
-    dup >r dup allocate throw
-    dup >r swap move r> r> ;
+    dup >r  dup allocate throw
+    dup >r  swap move  r> r> ;
 
 \ Convert character to lowercase.
 : to-lower ( C -- c )
@@ -25,7 +25,7 @@ variable num-uniques  0 num-uniques !
 : count-word ( addr u -- )
     2dup counts search-wordlist if
         \ Increment existing word
-        execute 1 swap +!
+        >body 1 swap +!
         2drop
     else
         \ Insert new (copied) word with count 1
@@ -35,33 +35,19 @@ variable num-uniques  0 num-uniques !
         1 num-uniques +!
     then ;
 
-\ Scan till space and return remaining string and word.
-: scan-word ( addr u -- rem-addr rem addr word-len )
-    2dup bl scan
-    2tuck rot swap - nip ;
-
-\ Process a line by splitting into words.
-: process-line ( addr u -- )
+\ Process text in the source buffer (one line).
+: process-input ( -- )
     begin
-        bl skip    \ Skip spaces
-        scan-word  \ Scan till space (or end)
-        dup if
-            count-word
-        else
-            2drop
-        then
-    dup 0= until
+        parse-name dup
+    while
+        count-word
+    repeat
     2drop ;
-
-\ Add word from wordlist to array at given offset.
-: add-word ( addr offset nt -- addr offset+cell true )
-    >r 2dup + r> swap !
-    cell+ true ;
 
 \ Less-than for words (true if count is *greater* for reverse sort).
 : count< ( nt1 nt2 -- )
-    >r name>string counts search-wordlist drop execute @
-    r> name>string counts search-wordlist drop execute @
+    >r name>interpret >body @
+    r> name>interpret >body @
     > ;
 
 \ In-place merge sort taken from Rosetta Code:
@@ -95,24 +81,29 @@ variable num-uniques  0 num-uniques !
 : sort ( addr len -- )
     cells over + swap mergesort 2drop ;
 
+\ Append word from wordlist to array at given offset.
+: append-word ( addr offset nt -- addr offset+cell true )
+    >r 2dup + r> swap !
+    cell+ true ;
+
 \ Show "word count" line for each word (unsorted).
 : show-words ( -- )
     num-uniques @ cells allocate throw
-    0 ['] add-word counts traverse-wordlist drop
+    0 ['] append-word counts traverse-wordlist drop
     dup num-uniques @ sort
     num-uniques @ 0 ?do
         dup i cells + @
         dup name>string type space
-        name>interpret execute @ . cr
+        name>interpret >body @ . cr
     loop
     drop ;
 
 : main ( -- )
-    counts set-current
+    counts set-current  \ Define into counts wordlist
     begin
         line max-line stdin read-line throw
     while
-        line swap process-line
+        line swap ['] process-input execute-parsing
     repeat
     drop
     show-words ;
