@@ -46,13 +46,17 @@ echo AWK simple
 gawk -f simple.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
-echo AWK optimized
-mawk -f optimized.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
+if command -v mawk > /dev/null; then
+  echo AWK optimized
+  mawk -f optimized.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
+  git diff --exit-code output.txt
+fi
 
-echo Forth simple
-../gforth/gforth simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
+if [ -x ../gforth/gforth ]; then
+  echo Forth simple
+  ../gforth/gforth simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
+  git diff --exit-code output.txt
+fi
 
 echo Unix shell
 bash simple.sh <kjvbible_x10.txt | awk '{ print $2, $1 }' | python3 normalize.py >output.txt
