@@ -18,6 +18,7 @@
 // once per buffer read.
 
 use std::{
+    convert::TryFrom,
     error::Error,
     io::{self, Read, Write},
 };
@@ -62,7 +63,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
         counts.increment(node_id);
     }
 
-    let mut ordered: Vec<(Vec<u8>, u64)> = counts.frequencies();
+    let mut ordered = counts.frequencies();
     ordered.sort_by(|&(_, cnt1), &(_, cnt2)| cnt1.cmp(&cnt2).reverse());
 
     let mut stdout = io::stdout();
@@ -72,23 +73,59 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-const NODE_SIZE: usize = 256;
+/// Since the challenge only requires dealing with ASCII, we can keep out
+/// NODE_SIZE to the ASCII range of bytes. This halves the size of the trie
+/// node table.
+///
+/// Technically, there are only 47 unique bytes in the input, so this could in
+/// theory be halved again. But you'd need some way to (very quickly) map the
+/// bytes into the smaller range, since the maximum byte value is 122. At this
+/// point, I think it probably starts violating the spirit of the challenge
+/// anyway. Coupling the program too tightly to a specific input is bad juju.
+///
+/// (At the very least, this should be a power-of-2. Otherwise, shifts get
+/// turned into more costly DIV instructions.)
+const NODE_SIZE: usize = 128;
 
 /// An ID that doubles as an index into a trie's node table. It is
 /// premultiplied, so that given a node ID 'N' and a byte 'b', computing
 /// its child only requires an addition: 'trie.nodes[N + b]'. (The
 /// typical formulation wouldn't premultiply the ID, and thus, you'd need
-/// 'trie.nodes[(N * 256) + b]'.)
-type TrieNodeID = std::num::NonZeroUsize;
+/// 'trie.nodes[(N * NODE_SIZE) + b]'.)
+///
+/// We use a u32 here instead of usize to cut the size of the trie node table
+/// in half.
+///
+/// Also, note that Option<NonZeroU32> is the same size in memory as a u32!
+///
+/// We could use a NonZeroU16 here to halve the table size again, but then we
+/// wouldn't be able to pre-multiply the node IDs. (Premultiplying them causes
+/// the IDs to be bigger than a u16::MAX.) In experiments, it looks like a
+/// wash.
+type TrieNodeID = std::num::NonZeroU32;
 
 /// A trie that stores its nodes contiguously in memory.
 #[derive(Clone, Debug)]
 struct Trie {
     /// A row-major contiguous allocation of trie nodes.
+    ///
+    /// The performance of this program seems highly sensitive to how big this
+    /// table is in memory. The smaller it is, the higher our cache hit rate
+    /// and the faster our program. See comments above for how NODE_SIZE and
+    /// the representation of TrieNodeID impact this.
+    ///
+    /// It's not quite clear how to shrink the table more. It's possible that
+    /// a strategy based on the frequency distribution of bytes that we see
+    /// (e.g., b'a'-b'z' are overwhelmingly the most common). That is, we might
+    /// have a separate table for common bytes and another larger one to handle
+    /// the rest. If most accesses are in the smaller table, then we likely
+    /// will increase our cache hit rate. The problem with this strategy is
+    /// tying everything together without introducing more overhead. Alas, I
+    /// ran out of time.
     nodes: Vec<Option<TrieNodeID>>,
     /// A count exists for each node in the trie. For a node ID 'N', one can
-    /// get its count via 'counts[N / 256]'.
-    counts: Vec<u64>,
+    /// get its count via 'counts[N / NODE_SIZE]'.
+    counts: Vec<u32>,
 }
 
 /// A borrow view of a single trie node. Used for traversing the trie to
@@ -96,7 +133,7 @@ struct Trie {
 #[derive(Clone, Debug)]
 struct TrieNode<'a> {
     children: &'a [Option<TrieNodeID>],
-    count: u64,
+    count: u32,
 }
 
 impl Trie {
@@ -106,7 +143,7 @@ impl Trie {
         // add dummy node with id==0. This is never used. We explicitly add it
         // to avoid needing to subtract 1 on every node lookup. The root starts
         // at id==1.
-        trie.nodes.extend(std::iter::repeat(None).take(256));
+        trie.nodes.extend(std::iter::repeat(None).take(NODE_SIZE));
         trie.counts.push(0);
         trie.alloc_node(); // root node
         trie
@@ -128,30 +165,37 @@ impl Trie {
         self.alloc_child(current_id, b)
     }
 
+    /// Allocate a new child for the given args and return its ID.
     fn alloc_child(&mut self, current_id: TrieNodeID, b: u8) -> TrieNodeID {
         let child = self.alloc_node();
-        self.nodes[current_id.get() + b as usize] = Some(child);
+        self.nodes[current_id.get() as usize + b as usize] = Some(child);
         child
     }
 
     /// Returns the child node ID of the given current node for the given byte.
+    /// If there is no child for the given args, then None is returned.
     fn child(&self, current_id: TrieNodeID, b: u8) -> Option<TrieNodeID> {
-        self.nodes[current_id.get() + b as usize]
+        self.nodes[current_id.get() as usize + b as usize]
     }
 
     /// Allocates a new node in this trie (with all children empty) and returns
     /// its ID.
     fn alloc_node(&mut self) -> TrieNodeID {
+        // This is correct since we assume that there are no more than
+        // 2^32/NODE_SIZE trie nodes. In practice, for this challenge, it
+        // works.
+        let id = self.counts.len().checked_mul(NODE_SIZE).unwrap();
         // This is correct since new() allocates space for a dummy node, so
-        // self.counts.len() is always at least 1.
-        let id = TrieNodeID::new(self.counts.len() * NODE_SIZE).unwrap();
-        self.nodes.extend(std::iter::repeat(None).take(256));
+        // self.counts.len() is always at least 1 and thus id is always greater
+        // than 0.
+        let id = TrieNodeID::new(u32::try_from(id).unwrap()).unwrap();
+        self.nodes.extend(std::iter::repeat(None).take(NODE_SIZE));
         self.counts.push(0);
         id
     }
 
     fn increment(&mut self, id: TrieNodeID) {
-        self.counts[id.get() / NODE_SIZE] += 1;
+        self.counts[id.get() as usize / NODE_SIZE] += 1;
     }
 
     fn is_root(&self, id: TrieNodeID) -> bool {
@@ -159,13 +203,13 @@ impl Trie {
     }
 
     fn node<'a>(&'a self, id: TrieNodeID) -> TrieNode<'a> {
-        let count = self.counts[id.get() / NODE_SIZE];
-        let start = id.get();
+        let count = self.counts[id.get() as usize / NODE_SIZE];
+        let start = id.get() as usize;
         let end = start + NODE_SIZE;
         TrieNode { children: &self.nodes[start..end], count }
     }
 
-    fn frequencies(&self) -> Vec<(Vec<u8>, u64)> {
+    fn frequencies(&self) -> Vec<(Vec<u8>, u32)> {
         struct NodeWithChild {
             id: TrieNodeID,
             byte: usize,
@@ -178,7 +222,7 @@ impl Trie {
 
         while let Some(NodeWithChild { id, byte }) = stack.pop() {
             let node = self.node(id);
-            if byte >= 256 {
+            if byte >= NODE_SIZE {
                 word.pop();
                 continue;
             }
@@ -205,11 +249,11 @@ impl Trie {
 
 impl<'a> TrieNode<'a> {
     fn next_child(&self, at_or_after: usize) -> usize {
-        for i in at_or_after..=(u8::MAX as usize) {
+        for i in at_or_after..NODE_SIZE {
             if self.children[i].is_some() {
                 return i;
             }
         }
-        256
+        NODE_SIZE
     }
 }
