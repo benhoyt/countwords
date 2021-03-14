@@ -22,6 +22,11 @@ go build -o optimized-go optimized.go
 ./optimized-go <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Rust simple
+cargo build --release --manifest-path rust/simple/Cargo.toml
+./rust/simple/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo C++ simple
 g++ -O2 simple.cpp -o simple-cpp
 ./simple-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
