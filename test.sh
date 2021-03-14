@@ -32,6 +32,11 @@ cargo build --release --manifest-path rust/optimized/Cargo.toml
 ./rust/optimized/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Rust optimized trie
+cargo build --release --manifest-path rust/optimized-trie/Cargo.toml
+./rust/optimized-trie/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo C++ simple
 g++ -O2 simple.cpp -o simple-cpp
 ./simple-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
