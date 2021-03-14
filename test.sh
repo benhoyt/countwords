@@ -77,15 +77,15 @@ if command -v mawk > /dev/null; then
   git diff --exit-code output.txt
 fi
 
-if [ -x ../gforth/gforth ]; then
+if [ -x ../gforth/gforth-fast ]; then
   echo Forth simple
-  ../gforth/gforth simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
+  ../gforth/gforth-fast simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
+  git diff --exit-code output.txt
+
+  echo Forth optimized
+  ../gforth/gforth-fast optimized.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
   git diff --exit-code output.txt
 fi
-
-echo Forth optimized
-../gforth/gforth optimized.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
 
 echo Unix shell simple
 bash simple.sh <kjvbible_x10.txt | awk '{ print $2, $1 }' | python3 normalize.py >output.txt

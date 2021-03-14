@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+# Benchmark different versions and output results table as Markdown
+# NOTE: run after ./test.sh (which compiles the binaries)
 
 import subprocess
 import time
@@ -20,6 +24,7 @@ programs = [
     ('`wc -w`', 'wc -w', 'LC_ALL=C wc -w', '`wc` reference; optimized sets `LC_ALL=C`'),
     ('C', './simple-c', './optimized-c', ''),
     ('Go', './simple-go', './optimized-go', ''),
+    ('Rust', './rust/simple/target/release/countwords', './rust/optimized/target/release/countwords', 'written by Andrew Gallant'),
     ('C++', './simple-cpp', './optimized-cpp', '"optimized" isn\'t very optimized'),
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
