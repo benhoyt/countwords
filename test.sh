@@ -54,6 +54,14 @@ echo Forth simple
 ../gforth/gforth simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
-echo Unix shell
+echo Forth optimized
+../gforth/gforth optimized.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Unix shell simple
 bash simple.sh <kjvbible_x10.txt | awk '{ print $2, $1 }' | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Unix shell optimized
+bash optimized.sh <kjvbible_x10.txt | awk '{ print $2, $1 }' | python3 normalize.py >output.txt
 git diff --exit-code output.txt
