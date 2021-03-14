@@ -42,6 +42,11 @@ cargo build --release --manifest-path rust/optimized-customhashmap/Cargo.toml
 ./rust/optimized-customhashmap/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Rust bonus '(Unicode word segmentation)'
+cargo build --release --manifest-path rust/bonus/Cargo.toml
+./rust/bonus/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+# We don't test its output since it uses a different segmenter.
+
 echo C++ simple
 g++ -O2 simple.cpp -o simple-cpp
 ./simple-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
