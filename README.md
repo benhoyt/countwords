@@ -7,3 +7,5 @@ To run the tests and benchmarks (you'll need Go, Rust, Python 3, AWK and perhaps
 ./test.sh
 ./benchmark.py
 ```
+
+Kudos and credits to Andrew Gallant for the Rust versions.
