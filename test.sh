@@ -22,6 +22,31 @@ go build -o optimized-go optimized.go
 ./optimized-go <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Rust simple
+cargo build --release --manifest-path rust/simple/Cargo.toml
+./rust/simple/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Rust optimized
+cargo build --release --manifest-path rust/optimized/Cargo.toml
+./rust/optimized/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Rust optimized trie
+cargo build --release --manifest-path rust/optimized-trie/Cargo.toml
+./rust/optimized-trie/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Rust optimized custom hashmap
+cargo build --release --manifest-path rust/optimized-customhashmap/Cargo.toml
+./rust/optimized-customhashmap/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Rust bonus '(Unicode word segmentation)'
+cargo build --release --manifest-path rust/bonus/Cargo.toml
+./rust/bonus/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
+# We don't test its output since it uses a different segmenter.
+
 echo C++ simple
 g++ -O2 simple.cpp -o simple-cpp
 ./simple-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
@@ -46,13 +71,17 @@ echo AWK simple
 gawk -f simple.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
-echo AWK optimized
-mawk -f optimized.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
+if command -v mawk > /dev/null; then
+  echo AWK optimized
+  mawk -f optimized.awk <kjvbible_x10.txt | python3 normalize.py >output.txt
+  git diff --exit-code output.txt
+fi
 
-echo Forth simple
-../gforth/gforth simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
+if [ -x ../gforth/gforth ]; then
+  echo Forth simple
+  ../gforth/gforth simple.fs <kjvbible_x10.txt | python3 normalize.py >output.txt
+  git diff --exit-code output.txt
+fi
 
 echo Forth optimized
 ../gforth/gforth optimized.fs <kjvbible_x10.txt | python3 normalize.py >output.txt

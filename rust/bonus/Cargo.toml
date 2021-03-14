@@ -1,0 +1,17 @@
+[package]
+name = "simple"
+version = "0.1.0"
+authors = ["Andrew Gallant <jamslam@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "countwords"
+path = "main.rs"
+
+[dependencies]
+anyhow = "1.0.38"
+bstr = "0.2.15"
+fxhash = "0.2.1"
+
+[profile.release]
+debug = true
