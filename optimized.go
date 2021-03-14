@@ -32,8 +32,6 @@ func main() {
 			toProcess = chunk[:lastLF]
 		}
 
-        // TODO: reorder Go one the same way as C -- simpler and seems faster
-
 		// Loop through toProcess slice and count words.
 		start := -1 // start -1 means in whitespace run
 		for i, c := range toProcess {
