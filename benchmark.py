@@ -30,6 +30,7 @@ programs = [
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
+    ('C#', './simple-cs', None, 'by John Taylor'),
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized sets `LC_ALL=C`'),
 ]
 
