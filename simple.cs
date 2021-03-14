@@ -1,4 +1,5 @@
-﻿
+﻿// Original version by John Taylor
+
 using System;
 using System.IO;
 using System.Collections.Generic;
