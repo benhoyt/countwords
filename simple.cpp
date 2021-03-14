@@ -13,6 +13,10 @@ int main() {
             [](unsigned char c){ return std::tolower(c); });
         ++counts[word];
     }
+    if (std::cin.bad()) {
+        std::cerr << "error reading stdin\n";
+        return 1;
+    }
 
     std::vector<std::pair<std::string, int>> ordered(counts.begin(),
         counts.end());
