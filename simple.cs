@@ -10,11 +10,10 @@ class Program
 {
     static void Main(string[] args)
     {
-        var counts = new Dictionary<string, int>();
+        var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         string line;
         while ((line = Console.ReadLine()) != null)
         {
-            line = line.ToLower();
             var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             foreach (string word in words)
             {
