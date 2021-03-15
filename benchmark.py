@@ -35,6 +35,7 @@ programs = [
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
+    ('Nim', './simple-nim', None, 'by csterritt and euantorano')
 ]
 
 times = []
