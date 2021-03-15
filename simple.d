@@ -1,6 +1,7 @@
 /+ To compile: ldc2 -O3 -of simple-d simple.d
             or gdc -O3 -o simple-d simple.d
             or dmd -release -of=simple-d simple.d
+   GDC is part of GCC so it should be on all modern Linux distributions.
 +/
 
 import std.stdio;

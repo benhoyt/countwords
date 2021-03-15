@@ -1,6 +1,7 @@
 /+ To compile: ldc2 -O3 -of optimized-d optimized.d
             or gdc -O3 -o optimized-d optimized.d
             or dmd -release -of=optimized-d optimized.d
+   GDC is part of GCC so it should be on all modern Linux distributions.
 +/
 
 import std.stdio;
