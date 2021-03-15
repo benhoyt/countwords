@@ -20,5 +20,6 @@ Thanks to these contributors for additional language versions:
 * Julia: [Alessandro Melis](https://github.com/alemelis)
 * C++ optimized version: [Jussi Pakkanen](https://github.com/jpakkane)
 * PHP: [Max Semenik](https://github.com/MaxSem)
+* Swift: [Daniel Müllenborn](https://github.com/damuellen)
 
 See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).
