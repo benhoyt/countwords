@@ -33,7 +33,7 @@ programs = [
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
-    ('Julia', 'julia simple.jl', '', ''),
+    ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
