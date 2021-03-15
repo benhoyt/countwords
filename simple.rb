@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-word_count = {}
+word_count = Hash.new(0)
 
 $stdin.each_line do |line|
   line.downcase.split.each do |word|
-    word_count[word] = word_count[word].to_i + 1 # nil.to_i => 0
+    word_count[word] += 1
   end
 end
 
