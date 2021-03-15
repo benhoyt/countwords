@@ -8,4 +8,13 @@ To run the tests and benchmarks (you'll need Go, Rust, Python 3, AWK and perhaps
 ./benchmark.py
 ```
 
-Kudos and credits to Andrew Gallant for the Rust versions.
+For the latest results (run on my machine), see the article's [performance results section](https://benhoyt.com/writings/count-words/#performance-results-and-learnings).
+
+Thanks to these contributors for additional language versions:
+
+* Rust: [Andrew Gallant](https://github.com/BurntSushi)
+* Perl: [Charles Randall](https://github.com/charles-randall)
+* Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)
+* JavaScript: [Dani Biró](https://github.com/Daninet)
+
+See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).
