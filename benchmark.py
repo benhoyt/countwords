@@ -28,7 +28,7 @@ programs = [
     ('Rust B', './rust/bonus/target/release/countwords', './rust/optimized-customhashmap/target/release/countwords', 'also by Andrew: bonus and custom hash'),
     ('C++', './simple-cpp', './optimized-cpp', '"optimized" isn\'t very optimized'),
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
-    ('C#', './simple-cs', None, 'original by John Taylor'),
+    ('C#', './simple-cs', './optimized-cs/CountWords', 'original by John Taylor'),
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),

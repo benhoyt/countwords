@@ -100,3 +100,9 @@ csc -optimize -out:simple-cs simple.cs
 chmod +x simple-cs
 ./simple-cs <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo C# optimized
+dotnet publish dotnet/CountWords.csproj -c Release -r linux-x64 -o optimized-cs
+chmod +x optimized-cs/CountWords
+./optimized-cs/CountWords <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
