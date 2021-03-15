@@ -1,19 +1,10 @@
-from tables import newCountTable, inc, sort, pairs
-from algorithm import SortOrder
-from strutils import split, toLowerAscii
-
-proc main() =
-  var table = newCountTable[string]()
-
-  for line in stdin.lines:
-    for word in line.toLowerAscii().split(' '):
-      if word.len() == 0: continue
-      table.inc(word)
-
-  table.sort(SortOrder.Descending)
-
-  for k, v in table.pairs():
-    echo k, ' ', v
+import tables, strutils
 
 when isMainModule:
-  main()
+  var wordFreqs: CountTable[string]
+  for line in stdin.lines():
+    for word in line.splitWhitespace():
+      wordFreqs.inc(toLowerAscii(word))
+  wordFreqs.sort()
+  for (word, count) in wordFreqs.pairs():
+    echo(word, " ", count)

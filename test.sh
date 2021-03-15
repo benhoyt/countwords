@@ -30,11 +30,6 @@ go build -o optimized-go optimized.go
 ./optimized-go <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
-echo Nim simple
-nim c --gc:orc -d:danger --opt:speed --passC:"-flto" --passL:"-flto" simple_nim.nim
-./simple_nim <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
-
 echo Rust simple
 cargo build --release --manifest-path rust/simple/Cargo.toml
 ./rust/simple/target/release/countwords <kjvbible_x10.txt | python3 normalize.py >output.txt
@@ -118,9 +113,9 @@ echo Julia simple
 julia simple.jl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
-echo nim simple
-nim c -d:danger -o:simple-nim simple.nim
-./simple-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
+echo Nim simple
+nim c --gc:orc -d:danger --opt:speed --passC:"-flto" --passL:"-flto" -o:simple_nim simple.nim
+./simple_nim <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Perl simple

@@ -24,7 +24,6 @@ programs = [
     ('`wc -w`', 'wc -w', 'LC_ALL=C wc -w', '`wc` baseline; optimized sets `LC_ALL=C`'),
     ('C', './simple-c', './optimized-c', ''),
     ('Go', './simple-go', './optimized-go', ''),
-    ('Nim', './simple_nim', None, ''),
     ('Rust A', './rust/simple/target/release/countwords', './rust/optimized/target/release/countwords', 'by Andrew Gallant'),
     ('Rust B', './rust/bonus/target/release/countwords', './rust/optimized-customhashmap/target/release/countwords', 'also by Andrew: bonus and custom hash'),
     ('C++', './simple-cpp', './optimized-cpp', '"optimized" isn\'t really optimized'),
@@ -35,9 +34,9 @@ programs = [
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
     ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
+    ('Nim', './simple_nim', None, 'by Indiscipline'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
-    ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
 ]
 
 times = []
