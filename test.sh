@@ -2,7 +2,11 @@
 
 set -e
 
-cat kjvbible.txt kjvbible.txt kjvbible.txt kjvbible.txt kjvbible.txt kjvbible.txt kjvbible.txt kjvbible.txt kjvbible.txt kjvbible.txt >kjvbible_x10.txt
+if [ ! -f "kjvbible_x10.txt" ]; then
+  for i in {1..10}; do
+    cat kjvbible.txt >> kjvbible_x10.txt
+  done
+fi
 
 echo Python simple
 python3 simple.py <kjvbible_x10.txt | python3 normalize.py >output.txt
