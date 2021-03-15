@@ -129,3 +129,11 @@ git diff --exit-code output.txt
 echo JavaScript optimized
 node ./optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo DLang simple
+dmd -release -O -inline -o- -of=simple-d simple.d
+./simple-d <kjvbible_x10.txt | python3 normalize.py >output.txt
+
+echo DLang optimized
+dmd -release -O -inline -o- -of=optimized-d optimized.d
+./optimized-d <kjvbible_x10.txt | python3 normalize.py >output.txt
