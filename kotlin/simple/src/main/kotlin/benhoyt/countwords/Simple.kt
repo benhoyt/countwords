@@ -9,8 +9,9 @@ class Simple {
 
         val input = Scanner(System.`in`)
         while (input.hasNextLine()) {
-            val words = input.nextLine().toLowerCase().split("\\s+".toRegex())
-            for (word in words) {
+            val tokenizer = StringTokenizer(input.nextLine())
+            while (tokenizer.hasMoreTokens()) {
+                val word = tokenizer.nextToken()
                 counts[word] = (counts[word] ?: 0) + 1
             }
         }
@@ -21,6 +22,7 @@ class Simple {
         }
     }
 }
+
 
 fun main() {
     Simple().solve()
