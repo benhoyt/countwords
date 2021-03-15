@@ -2,11 +2,12 @@
 
 const rd = require("readline");
 
-const dict = new Map();
+const dict = {};
 
 function RefNum(num) {
   this.num = num;
 }
+
 RefNum.prototype.toString = function () {
   return this.num.toString();
 };
@@ -14,11 +15,11 @@ RefNum.prototype.toString = function () {
 const wordHandler = (word) => {
   if (word.length === 0) return;
   word = word.toLowerCase();
-  const item = dict.get(word);
+  const item = dict[word];
   if (item !== undefined) {
     item.num++;
   } else {
-    dict.set(word, new RefNum(1));
+    dict[word] = new RefNum(1);
   }
 };
 
@@ -37,13 +38,10 @@ const lineHandler = (line) => {
 };
 
 const endHandler = () => {
-  const keys = Array.from(dict.keys());
-  keys.sort((a, b) => dict.get(b) - dict.get(a));
-  const len = keys.length;
-  for (let i = 0; i < len; ++i) {
-    const key = keys[i];
-    process.stdout.write(`${key} ${dict.get(key).num}\n`);
-  }
+  const keys = Object.keys(dict);
+  keys.sort((a, b) => dict[b].num - dict[a].num);
+
+  process.stdout.write(keys.map((key) => `${key} ${dict[key].num}\n`).join(""));
 };
 
 rd.createInterface({
