@@ -23,6 +23,7 @@ programs = [
     ('`grep`', 'grep foobar', 'LC_ALL=C grep foobar', '`grep` baseline; optimized sets `LC_ALL=C`'),
     ('`wc -w`', 'wc -w', 'LC_ALL=C wc -w', '`wc` baseline; optimized sets `LC_ALL=C`'),
     ('C', './simple-c', './optimized-c', ''),
+    ('D', './simple-d', './optimized-d', 'Optimized is not really optimized!'),
     ('Go', './simple-go', './optimized-go', ''),
     ('Rust A', './rust/simple/target/release/countwords', './rust/optimized/target/release/countwords', 'by Andrew Gallant'),
     ('Rust B', './rust/bonus/target/release/countwords', './rust/optimized-customhashmap/target/release/countwords', 'also by Andrew: bonus and custom hash'),
@@ -33,10 +34,7 @@ programs = [
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
-    ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
-    ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
-    ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
 ]
 
 times = []
