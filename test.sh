@@ -112,3 +112,11 @@ git diff --exit-code output.txt
 echo Perl simple
 perl simple.pl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo JavaScript simple
+node ./simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo JavaScript optimized
+node ./optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
