@@ -17,7 +17,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "benhoyt.countwords.UberKt"
+    mainClassName = "benhoyt.countwords.BonusKt"
 }
 
 tasks.withType<Jar> {
