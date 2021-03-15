@@ -1,32 +1,19 @@
-import algorithm
-import sequtils
-import strutils
-import tables
+from tables import newCountTable, inc, sort, pairs
+from algorithm import SortOrder
+from strutils import split, toLowerAscii
 
-type Word = object
-    word: string
-    count: int
+proc main() =
+  var table = newCountTable[string]()
 
-proc wordCmp(a, b: Word): int =
-    if a.count < b.count:
-        return 1
-    if a.count > b.count:
-        return -1
-    return -cmpIgnoreCase(a.word, b.word)
+  for line in stdin.lines:
+    for word in line.toLowerAscii().split(' '):
+      if word.len() == 0: continue
+      table.inc(word)
+
+  table.sort(SortOrder.Descending)
+
+  for k, v in table.pairs():
+    echo k, ' ', v
 
 when isMainModule:
-    var line = ""
-    var counts: Table[string, Word]
-    while stdin.readLine(line):
-        for word in splitWhitespace(toLowerAscii(line)):
-            if not counts.haskey(word):
-                counts[word] = Word(word: word, count: 0)
-            counts[word].count += 1
-
-    var countsList: seq[Word] = newSeq[Word](counts.len)
-    for index, word in toSeq(counts.keys):
-        countsList[index] = counts[word]
-    countsList.sort(wordCmp)
-
-    for word in countsList:
-        echo(word.word, " ", word.count)
+  main()
