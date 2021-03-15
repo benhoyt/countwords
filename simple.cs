@@ -22,9 +22,11 @@ class Program
             }
         }
         var ordered = counts.OrderByDescending(pair => pair.Value);
+        StringBuilder stringBuilder = new StringBuilder();
         foreach (var entry in ordered)
         {
-            Console.WriteLine("{0} {1}", entry.Key, entry.Value);
+            stringBuilder.AppendLine($"{entry.Key} {entry.Value}");
         }
+        Console.Write(stringBuilder.ToString());
     }
 }
