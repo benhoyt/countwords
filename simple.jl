@@ -1,6 +1,6 @@
 function wc(lines, counter=Dict())
     for line in lines, word in split(line)
-        get!(counter, word, 0) + 1
+        get!(counter, lowercase(word), 0) + 1
     end
     counter
 end
