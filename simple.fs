@@ -4,11 +4,6 @@ create line max-line allot  \ Buffer for read-line
 wordlist constant counts    \ Hash table of words to count
 variable num-uniques  0 num-uniques !
 
-\ Allocate space for new string and copy bytes, return new string.
-: copy-string ( addr u -- addr' u )
-    dup >r  dup allocate throw
-    dup >r  swap move  r> r> ;
-
 \ Convert character to lowercase.
 : to-lower ( C -- c )
     dup [char] A [ char Z 1+ ] literal within if
@@ -28,8 +23,7 @@ variable num-uniques  0 num-uniques !
         >body 1 swap +!
         2drop
     else
-        \ Insert new (copied) word with count 1
-        copy-string
+        \ Insert new word with count 1
         2dup lower-in-place
         ['] create execute-parsing 1 ,
         1 num-uniques +!
@@ -86,7 +80,7 @@ variable num-uniques  0 num-uniques !
     >r 2dup + r> swap !
     cell+ true ;
 
-\ Show "word count" line for each word (unsorted).
+\ Show "word count" line for each word, most frequent first.
 : show-words ( -- )
     num-uniques @ cells allocate throw
     0 ['] append-word counts traverse-wordlist drop

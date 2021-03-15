@@ -1,13 +1,11 @@
 
-200 constant max-line
-create line max-line allot  \ Buffer for read-line
-wordlist constant counts    \ Hash table of words to count
-variable num-uniques  0 num-uniques !
+\ Start hash table at larger size
+15 :noname to hashbits hashdouble ; execute
 
-\ Allocate space for new string and copy bytes, return new string.
-: copy-string ( addr u -- addr' u )
-    dup >r  dup allocate throw
-    dup >r  swap move  r> r> ;
+65536 constant buf-size
+create buf buf-size allot  \ Buffer for read-file
+wordlist constant counts   \ Hash table of words to count
+variable num-uniques  0 num-uniques !
 
 \ Convert character to lowercase.
 : to-lower ( C -- c )
@@ -22,33 +20,22 @@ variable num-uniques  0 num-uniques !
     loop ;
 
 \ Count given word in hash table.
-: count-word ( addr u -- )
-    2dup counts search-wordlist if
-        \ Increment existing word
-        >body 1 swap +!
-        2drop
+: count-word ( c-addr u -- )
+    2dup counts find-name-in dup if
+        ( name>interpret ) >body 1 swap +! 2drop
     else
-        \ Insert new (copied) word with count 1
-        copy-string
-        2dup lower-in-place
-        ['] create execute-parsing 1 ,
+        drop nextname create 1 ,
         1 num-uniques +!
     then ;
 
-\ Scan till space and return remaining string and word.
-: scan-word ( addr u -- rem-addr rem addr word-len )
-    2dup bl scan
-    2tuck rot swap - nip ;
-
-\ Process a line by splitting into words.
-: process-line ( addr u -- )
+\ Process text in the buffer.
+: process-string ( -- )
     begin
-        bl skip        \ Skip spaces
-        scan-word dup  \ Scan till space (or end)
+        parse-name dup
     while
         count-word
     repeat
-    2drop 2drop ;
+    2drop ;
 
 \ Less-than for words (true if count is *greater* for reverse sort).
 : count< ( nt1 nt2 -- )
@@ -89,10 +76,11 @@ variable num-uniques  0 num-uniques !
 
 \ Append word from wordlist to array at given offset.
 : append-word ( addr offset nt -- addr offset+cell true )
-    >r 2dup + r> swap !
+    dup name>string lower-in-place
+    >r  2dup + r> swap !
     cell+ true ;
 
-\ Show "word count" line for each word (unsorted).
+\ Show "word count" line for each word, most frequent first.
 : show-words ( -- )
     num-uniques @ cells allocate throw
     0 ['] append-word counts traverse-wordlist drop
@@ -104,14 +92,32 @@ variable num-uniques  0 num-uniques !
     loop
     drop ;
 
+\ Find last LF character in string, or return -1.
+: find-eol ( addr u -- eol-offset|-1 )
+    begin
+        1- dup 0>=
+    while
+        2dup + c@ 10 = if
+            nip exit
+        then
+    repeat
+    nip ;
+
 : main ( -- )
     counts set-current  \ Define into counts wordlist
+    0 >r  \ offset after remaining bytes
     begin
-        line max-line stdin read-line throw
+        \ Read from remaining bytes till end of buffer
+        buf r@ + buf-size r@ - stdin read-file throw dup
     while
-        line swap process-line
+        \ Process till last LF
+        buf over r@ + find-eol
+        dup buf swap ['] process-string execute-parsing
+        \ Move leftover bytes to start of buf, update offset
+        dup buf + -rot  buf -rot  - r@ +
+        r> drop dup >r  move
     repeat
-    drop
+    drop r> drop
     show-words ;
 
 main
