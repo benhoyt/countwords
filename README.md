@@ -21,5 +21,6 @@ Thanks to these contributors for additional language versions:
 * C++ optimized version: [Jussi Pakkanen](https://github.com/jpakkane)
 * PHP: [Max Semenik](https://github.com/MaxSem)
 * Swift: [Daniel Müllenborn](https://github.com/damuellen)
+* Crystal: [Andrea Manzini](https://github.com/ilmanzo)
 
 See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).

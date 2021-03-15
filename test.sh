@@ -103,6 +103,11 @@ echo Unix shell optimized
 bash optimized.sh <kjvbible_x10.txt | awk '{ print $2, $1 }' | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Crystal simple
+crystal build --release simple.cr -o simple-cr
+./simple-cr <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo C# simple
 csc -optimize -out:simple-cs simple.cs
 chmod +x simple-cs
