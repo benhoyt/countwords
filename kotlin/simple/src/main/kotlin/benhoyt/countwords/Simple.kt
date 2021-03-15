@@ -9,7 +9,7 @@ class Simple {
 
         val input = Scanner(System.`in`)
         while (input.hasNextLine()) {
-            val words = input.nextLine().toLowerCase().split(" ")
+            val words = input.nextLine().toLowerCase().split("\\s+".toRegex())
             for (word in words) {
                 counts[word] = (counts[word] ?: 0) + 1
             }

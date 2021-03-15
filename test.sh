@@ -119,7 +119,7 @@ dotnet build ./csharp/optimized -c Release
 git diff --exit-code output.txt
 
 echo Swift simple
-swiftc simple.swift -O -o simple-swift 
+swiftc simple.swift -O -o simple-swift
 ./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -156,4 +156,9 @@ git diff --exit-code output.txt
 
 echo PHP simple
 php simple.php <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Kotlin simple
+gradle build -p ./kotlin/simple
+java -jar ./kotlin/simple/build/libs/count-words-all.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
