@@ -8,7 +8,7 @@ while 1 do
   end
   chunk = remaining + chunk
   last_lf = chunk.rindex("\n")
-  if last_lf.nil?
+  if !last_lf
     remaining = ''
   else
     remaining = chunk[last_lf+1..]
