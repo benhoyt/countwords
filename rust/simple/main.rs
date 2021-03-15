@@ -33,7 +33,7 @@ fn main() {
 
 fn try_main() -> Result<(), Box<dyn Error>> {
     let stdin = io::stdin();
-    let stdin = io::BufReader::new(stdin.lock());
+    let stdin = stdin.lock();
     let mut counts: HashMap<String, u64> = HashMap::new();
     for result in stdin.lines() {
         let line = result?;

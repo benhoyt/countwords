@@ -1,3 +1,6 @@
+// NOTE: this isn't really optimized C++ (as C++ is not my forte).
+// See the C version for more optimization.
+
 #include <algorithm>
 #include <cctype>
 #include <iostream>
