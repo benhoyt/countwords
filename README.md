@@ -14,5 +14,6 @@ Thanks to these contributors for additional language versions:
 
 * Rust: [Andrew Gallant](https://github.com/BurntSushi)
 * Perl: [Charles Randall](https://github.com/charles-randall)
+* Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)
 
 See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).

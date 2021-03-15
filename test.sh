@@ -13,11 +13,11 @@ python3 optimized.py <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Ruby simple
-ruby simple.rb <kjvbible_x10.txt | python normalize.py >output.txt
+ruby simple.rb <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Ruby optimized
-ruby optimized.rb <kjvbible_x10.txt | python normalize.py >output.txt
+ruby optimized.rb <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Go simple
