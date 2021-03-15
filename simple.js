@@ -6,14 +6,9 @@ const dict = new Map();
 
 const wordHandler = (word) => {
   if (word.length === 0) return;
-  word = word.toLowerCase();
-  const item = dict.get(word);
-
-  if (item !== undefined) {
-    dict.set(word, item + 1);
-  } else {
-    dict.set(word, 1);
-  }
+  const lowerCaseWord = word.toLowerCase();
+  const value = (dict.get(lowerCaseWord) || 0) + 1;
+  dict.set(lowerCaseWord, value);
 };
 
 const lineHandler = (line) => {
@@ -23,11 +18,7 @@ const lineHandler = (line) => {
 const endHandler = () => {
   const keys = Array.from(dict.keys());
   keys.sort((a, b) => dict.get(b) - dict.get(a));
-  const len = keys.length;
-  for (let i = 0; i < len; ++i) {
-    const key = keys[i];
-    console.log(`${key} ${dict.get(key)}`);
-  }
+  keys.forEach((key) => console.log(`${key} ${dict.get(key)}`));
 };
 
 rd.createInterface({
