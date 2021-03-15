@@ -32,6 +32,7 @@ programs = [
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
+    ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
 ]
 
 times = []

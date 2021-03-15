@@ -100,3 +100,11 @@ csc -optimize -out:simple-cs simple.cs
 chmod +x simple-cs
 ./simple-cs <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo JavaScript simple
+node ./simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo JavaScript optimized
+node ./optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
