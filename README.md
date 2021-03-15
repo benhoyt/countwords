@@ -18,5 +18,6 @@ Thanks to these contributors for additional language versions:
 * JavaScript: [Dani Biró](https://github.com/Daninet)
 * Nim: [csterritt](https://github.com/csterritt) and [euantorano](https://github.com/euantorano)
 * Julia: [Alessandro Melis](https://github.com/alemelis)
+* C++ optimized version: [Jussi Pakkanen](https://github.com/jpakkane)
 
 See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).
