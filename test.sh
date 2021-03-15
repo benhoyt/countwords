@@ -101,7 +101,7 @@ chmod +x simple-cs
 ./simple-cs <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
-echo Swift# simple
+echo Swift simple
 swiftc simple.swift -O -o simple-swift 
 ./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
