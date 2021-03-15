@@ -20,13 +20,13 @@ def time_run(cmdline):
     return min(times)
 
 programs = [
-    ('`grep`', 'grep foobar', 'LC_ALL=C grep foobar', '`grep` reference; optimized sets `LC_ALL=C`'),
-    ('`wc -w`', 'wc -w', 'LC_ALL=C wc -w', '`wc` reference; optimized sets `LC_ALL=C`'),
+    ('`grep`', 'grep foobar', 'LC_ALL=C grep foobar', '`grep` baseline; optimized sets `LC_ALL=C`'),
+    ('`wc -w`', 'wc -w', 'LC_ALL=C wc -w', '`wc` baseline; optimized sets `LC_ALL=C`'),
     ('C', './simple-c', './optimized-c', ''),
     ('Go', './simple-go', './optimized-go', ''),
     ('Rust A', './rust/simple/target/release/countwords', './rust/optimized/target/release/countwords', 'by Andrew Gallant'),
     ('Rust B', './rust/bonus/target/release/countwords', './rust/optimized-customhashmap/target/release/countwords', 'also by Andrew: bonus and custom hash'),
-    ('C++', './simple-cpp', './optimized-cpp', '"optimized" isn\'t very optimized'),
+    ('C++', './simple-cpp', './optimized-cpp', '"optimized" isn\'t really optimized'),
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('C#', './simple-cs', None, 'original by John Taylor'),
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
