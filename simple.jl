@@ -1,10 +1,11 @@
-function wc(lines, counter=Dict())
-    for line in lines, word in lowercase.(split(line))
-        counter[word] = get!(counter, word, 0) + 1
+function wc(io, counter=Dict{String,Int}())
+    for line in eachline(io), word in split(line)
+        lword = lowercase(word)
+        counter[lword] = get(counter, lword, 0) + 1
     end
     counter
 end
 
-sortdict(counter) = sort(collect(counter), by=x->x[2], rev=true)
+sortdict(counter) = sort!(collect(counter), by=x->x[2], rev=true)
 
-wc(readlines()) |> sortdict .|> kv->println(kv[1], " ", kv[2]) 
+wc(stdin) |> sortdict .|> kv->println(kv[1], " ", kv[2]) 
