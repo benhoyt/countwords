@@ -42,7 +42,8 @@ programs = [
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
-    ('Kotlin', 'java -jar ./kotlin/simple/build/libs/count-words-all.jar', None, 'by Roman Garanin'),
+    ('Kotlin A', 'java -jar ./kotlin/simple/build/libs/count-words-all.jar', None, 'by Roman Garanin'),
+    ('Kotlin B', 'java -jar ./kotlin/bonus/build/libs/count-words-all.jar', None, 'by Roman Garanin'),
 ]
 
 times = []

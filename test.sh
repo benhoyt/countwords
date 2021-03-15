@@ -162,3 +162,8 @@ echo Kotlin simple
 gradle build -p ./kotlin/simple
 java -jar ./kotlin/simple/build/libs/count-words-all.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo Kotlin bonus
+gradle build -p ./kotlin/bonus
+java -jar ./kotlin/bonus/build/libs/count-words-all.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
