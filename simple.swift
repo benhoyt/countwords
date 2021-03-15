@@ -1,10 +1,6 @@
-import Foundation
+while let line = readLine() {
 
-let input = FileHandle.standardInput
-
-if let text = String(data: input.readDataToEndOfFile(), encoding: .utf8) {
-
-  let words = text.split { $0.isWhitespace || $0.isNewline }
+  let words = line.split { $0.isWhitespace }
 
   var counts = [String:Int]()
 
