@@ -48,7 +48,7 @@ func main() {
 					start = -1
 				}
 			} else {
-				// In whitespace, look for start of word (non-whitespace).
+				// In whitespace, look for start of word (non-space).
 				if c > ' ' {
 					start = i
 				}

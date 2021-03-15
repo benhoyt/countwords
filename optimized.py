@@ -8,7 +8,7 @@ while True:
     if not chunk:
         break
     chunk = remaining + chunk
-    last_lf = chunk.rfind('\n')
+    last_lf = chunk.rfind('\n')  # process to last LF character
     if last_lf == -1:
         remaining = ''
     else:
