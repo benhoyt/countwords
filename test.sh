@@ -61,7 +61,7 @@ g++ -O2 simple.cpp -o simple-cpp
 git diff --exit-code output.txt
 
 echo C++ optimized
-g++ -O2 -std=c++17 optimized.cpp -o optimized-cpp
+g++ -O2 -DNDEBUG  -std=c++17 optimized.cpp -o optimized-cpp
 ./optimized-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
