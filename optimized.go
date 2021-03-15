@@ -11,7 +11,7 @@ import (
 func main() {
 	offset := 0
 	buf := make([]byte, 64*1024)
-	counts := make(map[string]*int)
+	counts := make(map[string]int)
 	for {
 		// Read input in 64KB blocks till EOF.
 		n, err := os.Stdin.Read(buf[offset:])
@@ -44,7 +44,7 @@ func main() {
 				// In a word, look for end of word (whitespace).
 				if c <= ' ' {
 					// Count this word!
-					increment(counts, toProcess[start:i])
+					counts[string(toProcess[start:i])]++
 					start = -1
 				}
 			} else {
@@ -56,7 +56,7 @@ func main() {
 		}
 		// Count last word, if any.
 		if start >= 0 && start < len(toProcess) {
-			increment(counts, toProcess[start:])
+			counts[string(toProcess[start:])]++
 		}
 
 		// Copy remaining bytes (incomplete line) to start of buffer.
@@ -71,7 +71,7 @@ func main() {
 
 	var ordered []Count
 	for word, count := range counts {
-		ordered = append(ordered, Count{word, *count})
+		ordered = append(ordered, Count{word, count})
 	}
 	sort.Slice(ordered, func(i, j int) bool {
 		return ordered[i].Count > ordered[j].Count
@@ -80,17 +80,6 @@ func main() {
 	for _, count := range ordered {
 		fmt.Println(string(count.Word), count.Count)
 	}
-}
-
-func increment(counts map[string]*int, word []byte) {
-	if p, ok := counts[string(word)]; ok {
-		// Word already in map, increment existing int via pointer.
-		*p++
-		return
-	}
-	// Word not in map, insert new int.
-	n := 1
-	counts[string(word)] = &n
 }
 
 type Count struct {
