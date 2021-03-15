@@ -38,7 +38,7 @@ fn main() {
 
 fn try_main() -> anyhow::Result<()> {
     let stdin = io::stdin();
-    let stdin = io::BufReader::new(stdin.lock());
+    let stdin = stdin.lock();
 
     let mut counts: HashMap<BString, u64> = HashMap::default();
     let mut buf = BString::from(vec![]);

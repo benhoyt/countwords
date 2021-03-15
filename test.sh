@@ -12,6 +12,14 @@ echo Python optimized
 python3 optimized.py <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Ruby simple
+ruby simple.rb <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Ruby optimized
+ruby optimized.rb <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo Go simple
 go build -o simple-go simple.go
 ./simple-go <kjvbible_x10.txt | python3 normalize.py >output.txt
@@ -104,4 +112,16 @@ git diff --exit-code output.txt
 echo nim simple
 nim c -d:danger -o:simple-nim simple.nim
 ./simple-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Perl simple
+perl simple.pl <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo JavaScript simple
+node ./simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo JavaScript optimized
+node ./optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
