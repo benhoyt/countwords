@@ -61,7 +61,7 @@ g++ -O2 simple.cpp -o simple-cpp
 git diff --exit-code output.txt
 
 echo C++ optimized
-g++ -O2 optimized.cpp -o optimized-cpp
+g++ -O2 -std=c++17 optimized.cpp -o optimized-cpp
 ./optimized-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -112,6 +112,16 @@ git diff --exit-code output.txt
 echo Swift simple
 swiftc simple.swift -O -o simple-swift 
 ./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Julia simple
+julia simple.jl <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo nim simple
+nim c -d:danger -o:simple-nim simple.nim
+./simple-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
 
 echo Perl simple
 perl simple.pl <kjvbible_x10.txt | python3 normalize.py >output.txt
@@ -123,4 +133,8 @@ git diff --exit-code output.txt
 
 echo JavaScript optimized
 node ./optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo PHP simple
+php simple.php <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
