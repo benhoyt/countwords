@@ -102,4 +102,4 @@ chmod +x simple-cs
 git diff --exit-code output.txt
 
 echo Julia simple
-julia simple.jl kjvbible_x10.txt | python3 normalize.py >output.txt
+julia simple.jl <kjvbible_x10.txt | python3 normalize.py >output.txt
