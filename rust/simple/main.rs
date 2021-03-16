@@ -32,10 +32,14 @@ fn main() {
 }
 
 fn try_main() -> Result<(), Box<dyn Error>> {
+    let stdin = io::stdin();
+    let stdin = stdin.lock();
     let mut counts: HashMap<String, u64> = HashMap::new();
-    for line in io::stdin().lock().lines() {
-        for word in line?.split_whitespace() {
-            *counts.entry(word.to_lowercase()).or_insert(0) += 1;
+    for result in stdin.lines() {
+        let line = result?;
+        for word in line.split_whitespace() {
+            let canon = word.to_lowercase();
+            *counts.entry(canon).or_insert(0) += 1;
         }
     }
 
