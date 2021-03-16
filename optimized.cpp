@@ -1,34 +1,35 @@
-// NOTE: this isn't really optimized C++ (as C++ is not my forte).
-// See the C version for more optimization.
-
 #include <algorithm>
 #include <cctype>
 #include <iostream>
+#include <iterator>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 int main() {
-    std::ios::sync_with_stdio(false);
-
-    std::string word;
-    std::unordered_map<std::string, int> counts;
-    while (std::cin >> word) {
-        std::transform(word.begin(), word.end(), word.begin(),
-            [](unsigned char c){ return std::tolower(c); });
-        counts[word]++;
-    }
-    if (std::cin.bad()) {
-        std::cerr << "error reading stdin\n";
-        return 1;
-    }
-
-    std::vector<std::pair<std::string, int>> ordered(counts.begin(),
-        counts.end());
-    std::sort(ordered.begin(), ordered.end(),
-        [](auto const& a, auto const& b) { return a.second>b.second; });
-
-    for (auto const& count : ordered) {
-        std::cout << count.first << " " << count.second << "\n";
-    }
+  std::unordered_map<std::string, int>  counts;
+  std::string word; word.reserve(1024);
+  for (std::istreambuf_iterator<char> in(std::cin), end; in != end; ++in) {
+    unsigned char c = *in;
+    if (std::isspace(c)) {
+      if (!word.empty()) {
+        ++counts[word];
+        word.clear();
+      }
+    } else word.push_back(std::tolower(c));
+  }
+  if (!word.empty()) {  // in case file ends with no EOL
+    ++counts[word];
+  }
+  std::vector<std::pair<const std::string,int> const*>  vec;
+  vec.reserve(1<<15);
+  for (auto const& word : counts) {
+    vec.push_back(&word);
+  }
+  std::sort(vec.begin(), vec.end(), [](auto const* a, auto const* b) {
+    return a->second > b->second;
+  });
+  for (auto const* word : vec) {
+    std::cout << word->first << ' ' << word->second << '\n';
+  }
 }
