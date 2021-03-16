@@ -118,6 +118,21 @@ dotnet build ./csharp/optimized -c Release
 ./csharp/optimized/bin/Release/net5.0/optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo C# linq
+dotnet build ./csharp/linq -c Release
+./csharp/linq/bin/Release/net5.0/linq <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo F# simple
+dotnet build ./fsharp/simple -c Release
+./fsharp/simple/bin/Release/net5.0/simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo F# optimized
+dotnet build ./fsharp/optimized -c Release
+./fsharp/optimized/bin/Release/net5.0/optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo Swift simple
 swiftc simple.swift -O -o simple-swift 
 ./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
@@ -156,6 +171,11 @@ git diff --exit-code output.txt
 
 echo PHP simple
 php simple.php <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo OCaml simple
+ocamlopt.opt -O3 simple.ml -o simple-ml
+./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Kotlin simple JVM
