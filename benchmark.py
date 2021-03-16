@@ -43,6 +43,7 @@ programs = [
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
     ('OCaml', './simple-ml', None, 'by Nate Dobbins'),
+    ('Bash', './simple.bash', './optimized.bash', 'by Jesse Hathaway'),
 ]
 
 times = []
