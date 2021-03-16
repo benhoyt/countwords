@@ -1,4 +1,5 @@
-fun main() = generateSequence { readLine() }
+fun main() = System.`in`.bufferedReader()
+        .lineSequence()
         .flatMap { it.toLowerCase().splitToSequence(' ') }
         .filter { it.isNotBlank() }
         .groupingBy { it }
