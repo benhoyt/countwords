@@ -61,7 +61,7 @@ g++ -O2 simple.cpp -o simple-cpp
 git diff --exit-code output.txt
 
 echo C++ optimized
-g++ -O2 -std=c++17 optimized.cpp -o optimized-cpp
+g++ -O2 -DNDEBUG  -std=c++17 optimized.cpp -o optimized-cpp
 ./optimized-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -103,10 +103,24 @@ echo Unix shell optimized
 bash optimized.sh <kjvbible_x10.txt | awk '{ print $2, $1 }' | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Crystal simple
+crystal build --release simple.cr -o simple-cr
+./simple-cr <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo C# simple
-csc -optimize -out:simple-cs simple.cs
-chmod +x simple-cs
-./simple-cs <kjvbible_x10.txt | python3 normalize.py >output.txt
+dotnet build ./csharp/simple -c Release
+./csharp/simple/bin/Release/net5.0/simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo C# optimized
+dotnet build ./csharp/optimized -c Release
+./csharp/optimized/bin/Release/net5.0/optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Swift simple
+swiftc simple.swift -O -o simple-swift 
+./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Julia simple
@@ -133,7 +147,13 @@ git diff --exit-code output.txt
 echo DLang simple
 dmd -release -O -inline -o- -of=simple-d simple.d
 ./simple-d <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
 
 echo DLang optimized
 dmd -release -O -inline -o- -of=optimized-d optimized.d
 ./optimized-d <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo PHP simple
+php simple.php <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt

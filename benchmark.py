@@ -29,14 +29,17 @@ programs = [
     ('C++', './simple-cpp', './optimized-cpp', 'optimized by Jussi Pakkanen'),
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('Ruby', 'ruby simple.rb', 'ruby optimized.rb', 'by Bill Mill'),
-    ('C#', './simple-cs', None, 'original by John Taylor'),
+    ('C#', './csharp/simple/bin/Release/net5.0/simple', './csharp/optimized/bin/Release/net5.0/optimized', 'by John Taylor and Yuriy Ostapenko'),
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
+    ('Crystal', './simple-cr', None, 'by Andrea Manzini'),
+    ('Swift', './simple-swift', None, 'by Daniel Muellenborn'),
     ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
+    ('PHP', 'php simple.php', None, 'by Max Semenik'),
 ]
 
 times = []

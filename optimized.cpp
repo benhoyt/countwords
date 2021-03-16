@@ -1,79 +1,70 @@
 #include <algorithm>
 #include <cctype>
+#include <iostream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
-#include <iostream>
-#include <cassert>
 
 #ifdef USE_ABSEIL
 #include <absl/container/flat_hash_map.h>
-typedef absl::flat_hash_map<std::string, int> WordMap;
+typedef absl::flat_hash_map<std::string, int> word_map;
 #else
-typedef std::unordered_map<std::string, int> WordMap;
+typedef std::unordered_map<std::string, int> word_map;
 #endif
 
-size_t split_buffer(WordMap &counts, char *buf, size_t data_size) {
-    size_t i=0;
-    std::string word;
-    while(true) {
-        while(i<data_size && (buf[i] == ' ' || buf[i] == '\n')) {
-            ++i;
-        }
-        if(i == data_size) {
-            // Nothing but spaces.
-            break;
-        }
-        size_t word_start = i;
-        while(i<data_size && (buf[i] != ' ' && buf[i] != '\n')) {
-            if(buf[i] >= 'A' && buf[i] <= 'Z') {
-                buf[i] += 'a'-'A';
-            }
-            ++i;
-        }
-        if(i == data_size) {
-            // Reached the end of the buffer. Do not use this
-            // as the word may continue in the next data block;
-            return word_start;
-        }
-        size_t word_end = i;
-        word.clear();
-        word.append(buf + word_start, word_end - word_start);
-        ++counts[word];
-    }
-    return i;
+constexpr std::size_t max_buffer_size = 1 << 16;
+
+bool is_delimiter(char c) { return c == ' ' || c == '\n' || c == '\r'; }
+
+char simple_ascii_lower(char c) {
+  if (c < 'A' || c > 'Z') {
+    return c;
+  }
+  return c + ('a' - 'A');
+}
+
+void add_to_counter(word_map &counter, std::string &w) {
+  if (!w.empty()) {
+    counter[w]++;
+    w.clear();
+  }
 }
 
 int main(int argc, char **argv) {
-    WordMap counts;
-    counts.reserve(10000);
+  std::ios_base::sync_with_stdio(false);
 
-    const int bufsize = 8*1024;
-    char buf[bufsize];
-    int i=0;
-    FILE *f;
-    if(argc == 2) {
-        f = fopen(argv[1], "r");
-    } else {
-        f = stdin;
-    }
-    while (true) {
-        size_t num_read = fread(buf+i, 1, bufsize-i, f);
-        if (num_read == 0) {
-            break;
-        }
-        size_t data_size = i + num_read;
-        auto bytes_consumed = split_buffer(counts, buf, data_size);
-        std::copy(buf+bytes_consumed, buf+data_size, buf);
-        i = data_size - bytes_consumed;
-    }
+  std::string word;
+  std::array<char, max_buffer_size> buffer;
+  ssize_t read_size = 0;
 
-    std::vector<std::pair<std::string, int>> ordered(counts.begin(),
-        counts.end());
-    std::sort(ordered.begin(), ordered.end(),
-        [](auto const& a, auto const& b) { return a.second>b.second; });
+  word_map counts;
+  counts.reserve(
+      25000); // an average english speaker has 25K words of vocabulary
 
-    for (auto const& count : ordered) {
-        std::cout << count.first << " " << count.second << "\n";
+  while ((read_size = std::cin.readsome(buffer.data(), buffer.size())) > 0) {
+    std::string_view sbuffer(buffer.data(), read_size);
+    for (const auto c : sbuffer) {
+      if (!is_delimiter(c)) {
+        word.push_back(simple_ascii_lower(c));
+      } else {
+        add_to_counter(counts, word);
+      }
     }
+  }
+  if (std::cin.bad()) {
+    std::cerr << "error reading stdin\n";
+    return 1;
+  } else {
+    add_to_counter(counts, word);
+  }
+
+  std::vector<std::pair<std::string_view, int>> ordered(counts.begin(),
+                                                        counts.end());
+  std::sort(ordered.begin(), ordered.end(),
+            [](auto const &a, auto const &b) { return a.second > b.second; });
+
+  for (auto const &count : ordered) {
+    std::cout << count.first << ' ' << count.second << '\n';
+  }
 }
