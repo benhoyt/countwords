@@ -27,6 +27,7 @@ programs = [
     ('Rust A', './rust/simple/target/release/countwords', './rust/optimized/target/release/countwords', 'by Andrew Gallant'),
     ('Rust B', './rust/bonus/target/release/countwords', './rust/optimized-customhashmap/target/release/countwords', 'also by Andrew: bonus and custom hash'),
     ('C++', './simple-cpp', './optimized-cpp', 'optimized by Jussi Pakkanen'),
+    ('C++ (autoPGO)', './optimized-pgo-cpp', None, 'by Adev'),
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('Ruby', 'ruby simple.rb', 'ruby optimized.rb', 'by Bill Mill'),
     ('C#', './csharp/simple/bin/Release/net5.0/simple', './csharp/optimized/bin/Release/net5.0/optimized', 'by John Taylor and Yuriy Ostapenko'),
