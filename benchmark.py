@@ -35,14 +35,13 @@ programs = [
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
     ('Crystal', './simple-cr', None, 'by Andrea Manzini'),
     ('Swift', './simple-swift', None, 'by Daniel Muellenborn'),
-# Julia has a large startup time, so this benchmark is not very meaningful
-#    ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro and Flo Hinze'),
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
     ('OCaml', './simple-ml', None, 'by Nate Dobbins'),
+    ('Kotlin', 'java -jar simple-kotlin.jar', None, 'by Kazik Pogoda'),
 ]
 
 times = []
