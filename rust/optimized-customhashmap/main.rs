@@ -48,9 +48,8 @@ fn try_main() -> Result<(), Box<dyn Error>> {
                     hash = FNV_OFFSET;
                 }
             } else {
-                if b'A' <= b && b <= b'Z' {
-                    buf[i] += b'a' - b'A';
-                }
+                // 0x20 (6th bit) is the only different bit between lowercase and uppercase
+                buf[i] |= 0x20;
                 if start.is_none() {
                     start = Some(i);
                 }
