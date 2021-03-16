@@ -20,19 +20,23 @@ class Program
         using (var stream = Console.OpenStandardInput())
         using (var reader = new StreamReader(stream))
         {
-            var line = reader.ReadLine().ToLowerInvariant();
-            var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            string word;
-            for (int i = 0; i < words.Length; i++)
+            string line = null;
+            while ( (line = reader.ReadLine()) != null)
             {
-                word = words[i];
-                if (!counts.TryGetValue(word, out var count)) {
-                    counts.Add(word, new Ref<int>(1));
-                } else {
-                    ++count.Value;
+                var words = line.ToLowerInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string word;
+                for (int i = 0; i < words.Length; i++)
+                {
+                    word = words[i];
+                    if (!counts.TryGetValue(word, out var count)) {
+                        counts.Add(word, new Ref<int>(1));
+                    } else {
+                        ++count.Value;
+                    }
                 }
             }
         }
+        
         var ordered = counts.OrderByDescending(pair => pair.Value.Value);
         foreach (var entry in ordered)
         {
