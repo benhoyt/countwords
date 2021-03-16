@@ -26,7 +26,7 @@ char simple_ascii_lower(char c) {
 
 void add_to_counter(word_map &counter, std::string &w) {
   if (!w.empty()) {
-    counter[w]++;
+    ++counter[w];
     w.clear();
   }
 }
