@@ -1,42 +1,42 @@
-// Original version by John Taylor
-
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
-class Program
+var wordCount = new Dictionary<string, StrongBox<int>>(StringComparer.OrdinalIgnoreCase);
+
+using var stream = Console.OpenStandardInput();
+using var streamReader = new StreamReader(stream, System.Text.Encoding.UTF8, false, 64 * 1024);
+
+string line;
+while ((line = streamReader.ReadLine()) != null)
 {
-    public sealed class Ref<T> {
-        public Ref(T initialValue) {
-            Value = initialValue;
-        }
-        public T Value { get; set; }
-    }
-
-    static void Main(string[] args)
+    int lastPos = 0;
+    for (int index = 0; index <= line.Length; index++)
     {
-        var counts = new Dictionary<string, Ref<int>>();
-        string line;
-        while ((line = Console.ReadLine()) != null)
+        if (index == line.Length || line[index] == ' ')
         {
-            line = line.ToLowerInvariant();
-            var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            string word;
-            for (int i = 0; i < words.Length; i++)
+            if (lastPos < index)
             {
-                word = words[i];
-                if (!counts.TryGetValue(word, out var count)) {
-                    counts.Add(word, new Ref<int>(1));
+                // Substring takes ~15% of the time
+                var word = line.Substring(lastPos, index - lastPos);
+                // TryGetValue takes ~55% of the time
+                if (!wordCount.TryGetValue(word, out var count)) {
+                    wordCount.Add(word, new StrongBox<int>(1));
                 } else {
                     ++count.Value;
                 }
             }
-        }
-        var ordered = counts.OrderByDescending(pair => pair.Value.Value);
-        foreach (var entry in ordered)
-        {
-            Console.WriteLine("{0} {1}", entry.Key, entry.Value.Value);
+            lastPos = index + 1;
         }
     }
 }
+
+// minimal performance impact
+var ordered = wordCount.OrderByDescending(pair => pair.Value.Value);
+foreach (var entry in ordered)
+{
+    Console.WriteLine("{0} {1}", entry.Key.ToLower(), entry.Value.Value.ToString());
+}
+
