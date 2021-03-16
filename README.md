@@ -12,7 +12,7 @@ For the latest results (run on my machine), see the article's [performance resul
 
 Thanks to these contributors for additional language versions:
 
-* Bash: [Jesse Hathaway](https://github.com/lollipopman)
+* Bash: [Jesse Hathaway](https://github.com/lollipopman) - not included in benchmarks as it takes over 2 minutes
 * C#: [John Taylor](https://github.com/jftuga) and [Yuriy Ostapenko](https://github.com/uncleyo)
 * C++ optimized version: [Jussi Pakkanen](https://github.com/jpakkane) and [Adev](https://github.com/adevress)
 * Crystal: [Andrea Manzini](https://github.com/ilmanzo)

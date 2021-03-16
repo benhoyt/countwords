@@ -162,11 +162,3 @@ echo OCaml simple
 ocamlopt.opt -O3 simple.ml -o simple-ml
 ./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
-
-echo Bash simple
-./simple.bash <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
-
-echo Bash optimized
-./optimized.bash <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
