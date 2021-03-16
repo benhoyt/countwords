@@ -14,6 +14,7 @@ Thanks to these contributors for additional language versions:
 
 * Bash: [Jesse Hathaway](https://github.com/lollipopman) - not included in benchmarks as it takes over 2 minutes
 * C#: [John Taylor](https://github.com/jftuga) and [Yuriy Ostapenko](https://github.com/uncleyo)
+* C# (LINQ): [Osman Turan](https://github.com/osman-turan) - not run in benchmarks
 * C++ optimized version: [Jussi Pakkanen](https://github.com/jpakkane) and [Adev](https://github.com/adevress)
 * Crystal: [Andrea Manzini](https://github.com/ilmanzo)
 * D: [Ross Lonstein](https://github.com/rlonstein)
