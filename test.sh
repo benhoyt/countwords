@@ -67,6 +67,7 @@ git diff --exit-code output.txt
 
 echo "C++ (AutoPGO)"
 # compile and run once for profile generation
+rm -f profile-cpp/*
 g++ -static -O2  -DNDEBUG  -flto -std=c++17 -fprofile-generate=profile-cpp  optimized.cpp -o optimized-pgo-cpp
 ./optimized-pgo-cpp <kjvbible_x10.txt > /dev/null
 # recompile with profile info

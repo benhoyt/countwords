@@ -5,6 +5,7 @@
 
 import subprocess
 import time
+import math
 
 NUM_RUNS = 5
 INPUT_FILENAME = 'kjvbible_x10.txt'
@@ -27,7 +28,7 @@ programs = [
     ('Rust A', './rust/simple/target/release/countwords', './rust/optimized/target/release/countwords', 'by Andrew Gallant'),
     ('Rust B', './rust/bonus/target/release/countwords', './rust/optimized-customhashmap/target/release/countwords', 'also by Andrew: bonus and custom hash'),
     ('C++', './simple-cpp', './optimized-cpp', 'optimized by Jussi Pakkanen'),
-    ('C++ (autoPGO)', './optimized-pgo-cpp', None, 'by Adev'),
+    ('C++ (autoPGO)', None, './optimized-pgo-cpp', 'by Adev'),
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('Ruby', 'ruby simple.rb', 'ruby optimized.rb', 'by Bill Mill'),
     ('C#', './csharp/simple/bin/Release/net5.0/simple', './csharp/optimized/bin/Release/net5.0/optimized', 'by John Taylor and Yuriy Ostapenko'),
@@ -49,7 +50,7 @@ times = []
 for program in programs:
     lang, simple, optimized, _ = program
     print('Timing', lang, end=' ', flush=True)
-    simple_time = time_run(simple)
+    simple_time = time_run(simple) if simple else math.nan
     optimized_time = time_run(optimized) if optimized else None
     print('{:.2f} {:.2f}'.format(simple_time, optimized_time or 0))
     times.append((program, simple_time, optimized_time))
