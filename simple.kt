@@ -1,7 +1,6 @@
 import java.util.*
 import kotlin.collections.HashMap
 
-
 fun main() {
     val counts = HashMap<String, Int>()
 
