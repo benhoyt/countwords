@@ -159,6 +159,6 @@ php simple.php <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Kotlin simple
-gradle build -p ./kotlin/simple
-java -jar ./kotlin/simple/build/libs/count-words-all.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
+kotlinc -include-runtime simple.kt -d kotlin_simple.jar
+kotlin -jar kotlin_simple.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
