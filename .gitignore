@@ -18,3 +18,5 @@ simple-ml
 simple.cmi
 simple.cmx
 simple.o
+simple-kotlin.jar
+/.idea
