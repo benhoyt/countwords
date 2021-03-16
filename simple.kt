@@ -14,7 +14,7 @@ class Simple {
             }
         }
 
-        val pairs = counts.toList().sortedBy { pair -> pair.second }.reversed()
+        val pairs = counts.toList().sortedByDescending { pair -> pair.second }
         for ((word, count) in pairs) {
             print("$word $count\n")
         }
