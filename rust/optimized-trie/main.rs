@@ -64,11 +64,10 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     }
 
     let mut ordered = counts.frequencies();
-    ordered.sort_by(|&(_, cnt1), &(_, cnt2)| cnt1.cmp(&cnt2).reverse());
+    ordered.sort_unstable_by_key(|&(_, count)| count);
 
-    let mut stdout = io::stdout();
-    for (word, count) in ordered {
-        writeln!(stdout, "{} {}", std::str::from_utf8(&word)?, count)?;
+    for (word, count) in ordered.into_iter().rev() {
+        writeln!(io::stdout(), "{} {}", std::str::from_utf8(&word)?, count)?;
     }
     Ok(())
 }
