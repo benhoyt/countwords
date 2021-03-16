@@ -14,3 +14,6 @@ simple-d
 simple-d.o
 optimized-d
 optimized-d.o
+
+#IDE
+/.idea

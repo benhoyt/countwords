@@ -157,3 +157,11 @@ git diff --exit-code output.txt
 echo PHP simple
 php simple.php <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo Kotlin simple
+cp simple.kt kotlin-simple/src/main/kotlin/KotlinSimple.kt
+cd kotlin-simple
+./gradlew clean build
+cd ..
+java -jar kotlin-simple/build/libs/kotlin-simple-fat.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
