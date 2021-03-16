@@ -44,6 +44,7 @@ programs = [
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
     ('OCaml', './simple-ml', None, 'by Nate Dobbins'),
+    ('Lua', 'luajit simple.lua', 'luajit optimized.lua', 'by Solot Paul and Pierre Chapuis')
 ]
 
 times = []
