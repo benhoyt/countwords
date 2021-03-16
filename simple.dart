@@ -7,6 +7,7 @@ void main() {
     String? input = stdin.readLineSync();
     if (input == null) break;
     input.split(" ").forEach((word) {
+      if (word.isEmpty) return;
       final String lowerCaseWord = word.toLowerCase();
       dict[lowerCaseWord] = (dict[lowerCaseWord] ?? 0) + 1;
     });
