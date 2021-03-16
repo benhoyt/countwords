@@ -109,9 +109,13 @@ crystal build --release simple.cr -o simple-cr
 git diff --exit-code output.txt
 
 echo C# simple
-csc -optimize -out:simple-cs simple.cs
-chmod +x simple-cs
-./simple-cs <kjvbible_x10.txt | python3 normalize.py >output.txt
+dotnet build ./csharp/simple -c Release
+./csharp/simple/bin/Release/net5.0/simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo C# optimized
+dotnet build ./csharp/optimized -c Release
+./csharp/optimized/bin/Release/net5.0/optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Swift simple
