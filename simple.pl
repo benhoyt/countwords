@@ -7,16 +7,12 @@ use strict;
 
 my %WORDFREQ;
 while (my $line = <>) {
-    chomp $line;
-    $line = lc($line);
-    my @words = split(' ', $line);
-    foreach my $w (@words) {
-	$WORDFREQ{$w}++;
+    chomp($line);
+    foreach my $w (split(' ', lc($line))) {
+        $WORDFREQ{$w}++;
     }
 }
 
-my @freq_order = sort { $WORDFREQ{$b} <=> $WORDFREQ{$a} } keys %WORDFREQ;
-
-foreach my $w (@freq_order) {
+foreach my $w (sort { $WORDFREQ{$b} <=> $WORDFREQ{$a} } keys %WORDFREQ) {
     print "$w $WORDFREQ{$w}\n";
 }
