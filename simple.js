@@ -2,23 +2,22 @@
 
 const rd = require("readline");
 
-const dict = new Map();
+const dict = {};
 
-const wordHandler = (word) => {
-  if (word.length === 0) return;
-  const lowerCaseWord = word.toLowerCase();
-  const value = (dict.get(lowerCaseWord) || 0) + 1;
-  dict.set(lowerCaseWord, value);
+const wordHandler = word => {
+  if (!word) return;
+  dict[word] = (dict[word] || 0) + 1;
 };
 
-const lineHandler = (line) => {
-  line.split(" ").forEach(wordHandler);
+const lineHandler = line => {
+  if (!line) return;
+  line.toLowerCase().split(' ').forEach(wordHandler);
 };
 
 const endHandler = () => {
-  const keys = Array.from(dict.keys());
-  keys.sort((a, b) => dict.get(b) - dict.get(a));
-  keys.forEach((key) => console.log(`${key} ${dict.get(key)}`));
+  const entries = Object.entries(dict);
+  entries.sort((a, b) =>  b[1] - a[1]);
+  entries.forEach(entry => console.log(`${entry[0]} ${entry[1]}`));
 };
 
 rd.createInterface({

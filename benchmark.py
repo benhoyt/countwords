@@ -39,10 +39,11 @@ programs = [
 # Julia has a large startup time, so this benchmark is not very meaningful
 #    ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
-    ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
+    ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro and Flo Hinze'),
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
+    ('OCaml', './simple-ml', None, 'by Nate Dobbins'),
 ]
 
 times = []
