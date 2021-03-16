@@ -176,6 +176,13 @@ git diff --exit-code output.txt
 echo OCaml simple
 ocamlopt.opt -O3 simple.ml -o simple-ml
 ./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
+
+echo Lua simple
+luajit simple.lua <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Lua optimized
+luajit optimized.lua <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Kotlin simple JVM

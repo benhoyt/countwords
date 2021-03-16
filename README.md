@@ -22,6 +22,7 @@ Thanks to these contributors for additional language versions:
 * JavaScript: [Dani Biró](https://github.com/Daninet) and [Flo Hinze](https://github.com/laubsauger)
 * Julia: [Alessandro Melis](https://github.com/alemelis)
 * Kotlin: [Kazik Pogoda](https://github.com/morisil)
+* Lua: [Flemming Madsen](https://github.com/themadsens)
 * Nim: [csterritt](https://github.com/csterritt) and [euantorano](https://github.com/euantorano)
 * OCaml: [doesntgolf](https://github.com/doesntgolf)
 * Perl: [Charles Randall](https://github.com/charles-randall)
