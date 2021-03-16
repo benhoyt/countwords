@@ -47,9 +47,10 @@ programs = [
 times = []
 for program in programs:
     lang, simple, optimized, _ = program
-    print('Timing', lang)
+    print('Timing', lang, end=' ', flush=True)
     simple_time = time_run(simple)
     optimized_time = time_run(optimized) if optimized else None
+    print('{:.2f} {:.2f}'.format(simple_time, optimized_time or 0))
     times.append((program, simple_time, optimized_time))
 times.sort(key=lambda x: x[1])  # sort by simple_time
 
