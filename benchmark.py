@@ -35,7 +35,8 @@ programs = [
     ('Shell', 'bash simple.sh', 'bash optimized.sh', 'optimized does `LC_ALL=C sort -S 2G`'),
     ('Crystal', './simple-cr', None, 'by Andrea Manzini'),
     ('Swift', './simple-swift', None, 'by Daniel Muellenborn'),
-    ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
+# Julia has a large startup time, so this benchmark is not very meaningful
+#    ('Julia', 'julia simple.jl', None, 'by Alessandro Melis'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
