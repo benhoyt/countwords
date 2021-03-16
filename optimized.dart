@@ -11,6 +11,7 @@ void main() {
   StreamSubscription? cmdLineSubscription;
   cmdLineSubscription = readLine().listen((processLine) {
     processLine.split(" ").forEach((word) {
+      if (word.isEmpty) return;
       final String lowerCaseWord = word.toLowerCase();
       dict[lowerCaseWord] = (dict[lowerCaseWord] ?? 0) + 1;
     });
