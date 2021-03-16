@@ -20,7 +20,7 @@ class Program
         string line;
         while ((line = Console.ReadLine()) != null)
         {
-            line = line.ToLower();
+            line = line.ToLowerInvariant();
             var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             string word;
             for (int i = 0; i < words.Length; i++)
@@ -29,7 +29,7 @@ class Program
                 if (!counts.TryGetValue(word, out var count)) {
                     counts.Add(word, new Ref<int>(1));
                 } else {
-                    count.Value += 1;
+                    ++count.Value;
                 }
             }
         }

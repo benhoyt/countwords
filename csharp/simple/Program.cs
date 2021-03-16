@@ -13,7 +13,7 @@ class Program
         string line;
         while ((line = Console.ReadLine()) != null)
         {
-            line = line.ToLower();
+            line = line.ToLowerInvariant();
             var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             foreach (string word in words)
             {
