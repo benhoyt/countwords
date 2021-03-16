@@ -14,3 +14,7 @@ simple-d
 simple-d.o
 optimized-d
 optimized-d.o
+simple-ml
+simple.cmi
+simple.cmx
+simple.o
