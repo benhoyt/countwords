@@ -16,5 +16,7 @@ while True:
         chunk = chunk[:last_lf]
     counts.update(chunk.lower().split())
 
+counts.update(remaining.lower().split())
+
 for word, count in counts.most_common():
     print(word, count)
