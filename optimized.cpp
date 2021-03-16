@@ -1,34 +1,70 @@
-// NOTE: this isn't really optimized C++ (as C++ is not my forte).
-// See the C version for more optimization.
-
 #include <algorithm>
 #include <cctype>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
-int main() {
-    std::ios::sync_with_stdio(false);
+#ifdef USE_ABSEIL
+#include <absl/container/flat_hash_map.h>
+typedef absl::flat_hash_map<std::string, int> word_map;
+#else
+typedef std::unordered_map<std::string, int> word_map;
+#endif
 
-    std::string word;
-    std::unordered_map<std::string, int> counts;
-    while (std::cin >> word) {
-        std::transform(word.begin(), word.end(), word.begin(),
-            [](unsigned char c){ return std::tolower(c); });
-        counts[word]++;
-    }
-    if (std::cin.bad()) {
-        std::cerr << "error reading stdin\n";
-        return 1;
-    }
+constexpr std::size_t max_buffer_size = 1 << 16;
 
-    std::vector<std::pair<std::string, int>> ordered(counts.begin(),
-        counts.end());
-    std::sort(ordered.begin(), ordered.end(),
-        [](auto const& a, auto const& b) { return a.second>b.second; });
+bool is_delimiter(char c) { return c == ' ' || c == '\n' || c == '\r'; }
 
-    for (auto const& count : ordered) {
-        std::cout << count.first << " " << count.second << "\n";
+char simple_ascii_lower(char c) {
+  if (c < 'A' || c > 'Z') {
+    return c;
+  }
+  return c + ('a' - 'A');
+}
+
+void add_to_counter(word_map &counter, std::string &w) {
+  if (!w.empty()) {
+    counter[w]++;
+    w.clear();
+  }
+}
+
+int main(int argc, char **argv) {
+  std::ios_base::sync_with_stdio(false);
+
+  std::string word;
+  std::array<char, max_buffer_size> buffer;
+  ssize_t read_size = 0;
+
+  word_map counts;
+  counts.reserve(
+      25000); // an average english speaker has 25K words of vocabulary
+
+  while ((read_size = std::cin.readsome(buffer.data(), buffer.size())) > 0) {
+    std::string_view sbuffer(buffer.data(), read_size);
+    for (const auto c : sbuffer) {
+      if (!is_delimiter(c)) {
+        word.push_back(simple_ascii_lower(c));
+      } else {
+        add_to_counter(counts, word);
+      }
     }
+  }
+  if (std::cin.bad()) {
+    std::cerr << "error reading stdin\n";
+    return 1;
+  } else {
+    add_to_counter(counts, word);
+  }
+
+  std::vector<std::pair<std::string_view, int>> ordered(counts.begin(),
+                                                        counts.end());
+  std::sort(ordered.begin(), ordered.end(),
+            [](auto const &a, auto const &b) { return a.second > b.second; });
+
+  for (auto const &count : ordered) {
+    std::cout << count.first << ' ' << count.second << '\n';
+  }
 }

@@ -140,7 +140,8 @@ int main() {
     }
     qsort(ordered, num_unique, sizeof(count), cmp_count);
     for (int i=0; i<num_unique; i++) {
-        printf("%s %d\n", ordered[i].word, ordered[i].count);
+        printf("%.*s %d\n",
+                ordered[i].word_len, ordered[i].word, ordered[i].count);
     }
 
     return 0;
