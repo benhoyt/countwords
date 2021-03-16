@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include <vector>
+
 
 int main() {
     std::string word;
@@ -18,12 +18,8 @@ int main() {
         return 1;
     }
 
-    std::vector<std::pair<std::string, int>> ordered(counts.begin(),
-        counts.end());
-    std::sort(ordered.begin(), ordered.end(),
-        [](auto const& a, auto const& b) { return a.second>b.second; });
-
-    for (auto const& count : ordered) {
-        std::cout << count.first << " " << count.second << "\n";
+  
+    for (auto const elem : counts) {
+        std::cout << elem.first << " " << elem.second << "\n";
     }
 }
