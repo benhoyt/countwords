@@ -14,6 +14,7 @@ simple-d
 simple-d.o
 optimized-d
 optimized-d.o
+simple-kotlin.jar
 
 #IDE
 /.idea
