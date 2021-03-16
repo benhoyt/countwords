@@ -1,6 +1,6 @@
 fun main() = generateSequence { readLine() }
         .flatMap { it.toLowerCase().splitToSequence(' ') }
-        .filter { !it.isBlank() }
+        .filter { it.isNotBlank() }
         .groupingBy { it }
         .eachCount()
         .asSequence()
