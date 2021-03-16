@@ -1,53 +1,49 @@
 "use strict";
 
-const rd = require("readline");
-
 const dict = {};
 
-function RefNum(num) {
-  this.num = num;
-}
-
-RefNum.prototype.toString = function () {
-  return this.num.toString();
-};
-
-const wordHandler = (word) => {
-  if (word.length === 0) return;
-  word = word.toLowerCase();
-  const item = dict[word];
-  if (item !== undefined) {
-    item.num++;
-  } else {
-    dict[word] = new RefNum(1);
-  }
-};
-
-const lineHandler = (line) => {
+// Calls itemHandler on each substring terminated by the token.
+// Returns any leftover characters in the string
+const forEachTerminated = (str, token, itemHandler) => {
   let lastIndex = 0;
-  while (true) {
-    const index = line.indexOf(" ", lastIndex);
-    if (index === -1) {
-      wordHandler(line.slice(lastIndex));
-      return;
-    }
 
-    wordHandler(line.slice(lastIndex, index));
+  while (true) {
+    const index = str.indexOf(token, lastIndex);
+
+    if (index === -1) break;
+    if(index > lastIndex) itemHandler(str.slice(lastIndex, index));
+
     lastIndex = index + 1;
   }
+
+  if(lastIndex < str.length - 1) return str.slice(lastIndex);
+  return "";
+};
+
+const wordHandler = word => {
+  dict[word] = (dict[word] || 0) + 1;
+};
+
+const lineHandler = line => {
+  wordHandler(forEachTerminated(line, " ", wordHandler));
 };
 
 const endHandler = () => {
-  const keys = Object.keys(dict);
-  keys.sort((a, b) => dict[b].num - dict[a].num);
-
-  process.stdout.write(keys.map((key) => `${key} ${dict[key].num}\n`).join(""));
+  const entries = Object.entries(dict);
+  entries.sort((a, b) =>  b[1] - a[1]);
+  const output = entries.map((entry) => `${entry[0]} ${entry[1]}\n`).join("");
+  process.stdout.write(output);
 };
 
-rd.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false,
-})
-  .on("line", lineHandler)
-  .on("close", endHandler);
+let buffer = "";
+process.stdin.setEncoding("utf-8");
+process.stdin.resume();
+
+process.stdin.on("data", (data) => {
+  buffer = forEachTerminated(buffer + data.toLowerCase(), "\n", lineHandler);
+});
+
+process.stdin.on("end", () => {
+  if(buffer.length > 0) lineHandler(buffer);
+  endHandler();
+});
