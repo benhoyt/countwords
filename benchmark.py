@@ -30,6 +30,7 @@ programs = [
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('Ruby', 'ruby simple.rb', 'ruby optimized.rb', 'by Bill Mill'),
     ('C#', './csharp/simple/bin/Release/net5.0/simple', './csharp/optimized/bin/Release/net5.0/optimized', 'by John Taylor and Yuriy Ostapenko'),
+    ('C# (LINQ)', './csharp/linq/bin/Release/net5.0/linq', None, 'by Osman Turan'),
     ('F#', './fsharp/simple/bin/Release/net5.0/simple', './fsharp/optimized/bin/Release/net5.0/optimized', 'by Yuriy Ostapenko'),
     ('AWK', 'gawk -f simple.awk', 'mawk -f optimized.awk', 'optimized uses `mawk`'),
     ('Forth', '../gforth/gforth-fast simple.fs', '../gforth/gforth-fast optimized.fs', ''),
