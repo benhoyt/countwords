@@ -157,3 +157,11 @@ git diff --exit-code output.txt
 echo PHP simple
 php simple.php <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo Dart simple
+dart simple.dart <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Dart optimized
+dart optimized.dart <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt

@@ -41,6 +41,7 @@ programs = [
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
+    ('Dart', 'dart ./simple.dart', 'dart ./optimized.dart', 'by Amir Fazleev'),
 ]
 
 times = []
