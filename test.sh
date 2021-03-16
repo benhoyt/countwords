@@ -179,9 +179,9 @@ ocamlopt.opt -O3 simple.ml -o simple-ml
 git diff --exit-code output.txt
 
 echo Lua simple
-luajit simple.lua | python3 normalize.py >output.txt
+luajit simple.lua < kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Lua optimized
-luajit optimized.lua | python3 normalize.py >output.txt
+luajit optimized.lua < kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt

@@ -21,6 +21,7 @@ Thanks to these contributors for additional language versions:
 * F#: [Yuriy Ostapenko](https://github.com/uncleyo)
 * JavaScript: [Dani Biró](https://github.com/Daninet) and [Flo Hinze](https://github.com/laubsauger)
 * Julia: [Alessandro Melis](https://github.com/alemelis)
+* Lua: [Solot Paul](https://github.com/DarkWarrior703) and [Pierre Chapuis](https://github.com/catwell)
 * Nim: [csterritt](https://github.com/csterritt) and [euantorano](https://github.com/euantorano)
 * OCaml: [doesntgolf](https://github.com/doesntgolf)
 * Perl: [Charles Randall](https://github.com/charles-randall)
