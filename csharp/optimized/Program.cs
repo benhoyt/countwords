@@ -17,10 +17,10 @@ class Program
     static void Main(string[] args)
     {
         var counts = new Dictionary<string, Ref<int>>();
-        string line;
-        while ((line = Console.ReadLine()) != null)
+        using (var stream = Console.OpenStandardInput())
+        using (var reader = new StreamReader(stream))
         {
-            line = line.ToLowerInvariant();
+            var line = reader.ReadLine().ToLowerInvariant();
             var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             string word;
             for (int i = 0; i < words.Length; i++)
