@@ -40,6 +40,7 @@ programs = [
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro'),
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
+    ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
 ]
 
 times = []

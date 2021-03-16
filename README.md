@@ -23,5 +23,6 @@ Thanks to these contributors for additional language versions:
 * PHP: [Max Semenik](https://github.com/MaxSem)
 * Swift: [Daniel Müllenborn](https://github.com/damuellen)
 * Crystal: [Andrea Manzini](https://github.com/ilmanzo)
+* D: [Ross Lonstein](https://github.com/rlonstein)
 
 See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).
