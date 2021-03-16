@@ -20,12 +20,11 @@ void main() {
       for (ptrdiff_t idx = 0; idx < word.length; idx++) {
         word[idx] = mytolower(word[idx]);
       }
-      auto key = cast(immutable char[])word.dup;
-      if (auto ptr = (key in freq)) {
+      if (auto ptr = (word in freq)) {
         ++*ptr;
       }
       else {
-        freq[key] = 1;
+        freq[cast(immutable char[])word.dup] = 1;
       }
     }
   }
