@@ -12,6 +12,7 @@ For the latest results (run on my machine), see the article's [performance resul
 
 Thanks to these contributors for additional language versions:
 
+* C#: [John Taylor](https://github.com/jftuga) and [Yuriy Ostapenko](https://github.com/uncleyo)
 * Rust: [Andrew Gallant](https://github.com/BurntSushi)
 * Perl: [Charles Randall](https://github.com/charles-randall)
 * Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)
