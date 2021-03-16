@@ -1,5 +1,3 @@
-package benhoyt.countwords
-
 import java.util.*
 import kotlin.collections.HashMap
 
