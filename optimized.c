@@ -72,64 +72,49 @@ int main() {
         return 1;
     }
 
-    char buf[BUF_SIZE];
-    int offset = 0;
+    char buf[BUF_SIZE + 3];
+    char *buf_end = buf + fread(buf, 1, BUF_SIZE , stdin);
+
     while (1) {
-        // Read file in chunks, processing one chunk at a time.
-        size_t num_read = fread(buf+offset, 1, BUF_SIZE-offset, stdin);
-        if (num_read == 0) {
-            break;
-        }
+        // extra word + space to avoid checks for size 
+        buf_end[0] = ' ';
+        buf_end[1] = 'a';
+        buf_end[2] = ' ';
 
-        // Find last space or linefeed in buf and process up to there.
-        int space;
-        for (space = offset+num_read-1; space>=0; space--) {
-            char c = buf[space];
-            if (c <= ' ') {
-                break;
-            }
-        }
-        int num_process = (space >= 0) ? space : (int)num_read+offset;
+        char *word_start = buf;
+        char *word_end = buf;
 
-        // Scan chars to process: tokenize, lowercase, and hash as we go.
-        int i = 0;
         while (1) {
-            // Skip whitespace before word.
-            for (; i < num_process; i++) {
-                char c = buf[i];
-                if (c > ' ') {
-                    break;
-                }
+            uint64_t word_hash = FNV_OFFSET;
+
+            // Skip whitespace to find next word_start
+            while (*word_start <= ' ') ++word_start;
+            word_end = word_start;
+
+            // Read till we find word_end and transform / compute hash on the way
+            while (*word_end > ' ') {
+                if (*word_end >= 'A' && *word_end <= 'Z')
+                    *word_end += ('a' - 'A');
+                word_hash *= FNV_PRIME;
+                word_hash ^= *word_end;
+                ++word_end;
             }
-            // Look for end of word, lowercase and hash as we go.
-            uint64_t hash = FNV_OFFSET;
-            int start = i;
-            for (; i < num_process; i++) {
-                char c = buf[i];
-                if (c <= ' ') {
-                    break;
-                }
-                if (c >= 'A' && c <= 'Z') {
-                    c += ('a' - 'A');
-                    buf[i] = c;
-                }
-                hash *= FNV_PRIME;
-                hash ^= (uint64_t)c;
-            }
-            if (i <= start) {
-                break;
-            }
-            // Got a word, increment count in hash table.
-            increment(buf+start, i-start, hash);
+
+            // If the word end is beyond buf_end
+            if (word_end >= buf_end) break;
+
+            increment(word_start, word_end - word_start, word_hash);
+            word_start = ++word_end;
         }
 
-        // Move down remaining partial word.
-        if (space >= 0) {
-            offset = (offset+num_read-1) - space;
-            memmove(buf, buf+space+1, offset);
-        } else {
-            offset = 0;
-        }
+        size_t remaining = word_start < buf_end? buf_end - word_start : 0;
+
+        memmove(buf, word_start, remaining);
+        buf_end = buf + remaining;
+        buf_end += fread(buf_end, 1, BUF_SIZE - remaining, stdin);
+
+        // End of input
+        if (buf_end == buf + remaining) break;
     }
 
     count* ordered = calloc(num_unique, sizeof(count));
