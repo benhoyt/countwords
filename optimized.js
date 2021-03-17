@@ -25,6 +25,7 @@ const wordHandler = word => {
 };
 
 const lineHandler = line => {
+  if(line.length === 0) return;
   wordHandler(forEachTerminated(line, " ", wordHandler));
 };
 
