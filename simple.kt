@@ -1,4 +1,6 @@
-fun main() = System.`in`.bufferedReader()
+fun main() = System.`in`
+        .buffered(1024 * 64)
+        .bufferedReader()
         .lineSequence()
         .flatMap { it.toLowerCase().splitToSequence(' ') }
         .filter { it.isNotBlank() }
