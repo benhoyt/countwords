@@ -53,9 +53,10 @@ fn try_main() -> anyhow::Result<()> {
         Ok(true)
     })?;
 
-    let mut ordered: Vec<(BString, u64)> = counts.into_iter().collect();
-    ordered.sort_by(|&(_, cnt1), &(_, cnt2)| cnt1.cmp(&cnt2).reverse());
-    for (word, count) in ordered {
+    let mut ordered: Vec<_> = counts.into_iter().collect();
+    ordered.sort_unstable_by_key(|&(_, count)| count);
+
+    for (word, count) in ordered.into_iter().rev() {
         writeln!(io::stdout(), "{} {}", word, count)?;
     }
     Ok(())
