@@ -134,7 +134,7 @@ dotnet build ./fsharp/optimized -c Release
 git diff --exit-code output.txt
 
 echo Swift simple
-swiftc simple.swift -O -o simple-swift 
+swiftc simple.swift -O -o simple-swift
 ./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -193,4 +193,9 @@ git diff --exit-code output.txt
 echo Kotlin simple JVM
 kotlinc simple.kt -no-reflect -include-runtime -jvm-target 14 -language-version 1.4 -d simple-kotlin.jar
 java -jar simple-kotlin.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Zig simple
+zig build-exe -OReleaseFast --name simple-zig simple.zig
+./simple-zig <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
