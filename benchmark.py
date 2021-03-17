@@ -37,7 +37,7 @@ programs = [
     ('Swift', './simple-swift', None, 'by Daniel Muellenborn'),
     ('Perl', 'perl simple.pl', None, 'by Charles Randall'),
     ('JavaScript', 'node ./simple', 'node ./optimized', 'by Dani Biro and Flo Hinze'),
-    ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
+    ('Nim', './simple-nim', './optimized-nim', 'by csterritt and euantorano'),
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
     ('OCaml', './simple-ml', None, 'by Nate Dobbins'),
