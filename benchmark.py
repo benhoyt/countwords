@@ -40,7 +40,7 @@ programs = [
     ('Nim', './simple-nim', None, 'by csterritt and euantorano'),
     ('PHP', 'php simple.php', None, 'by Max Semenik'),
     ('D', './simple-d', './optimized-d', 'by Ross Lonstein'),
-    ('OCaml', './simple-ml', None, 'by Nate Dobbins'),
+    ('OCaml', './simple-ml', None, 'by Nate Dobbins and Pavlo Khrystenko'),
     ('Kotlin', 'java -jar simple-kotlin.jar', None, 'by Kazik Pogoda'),
     ('Lua', 'luajit simple.lua', 'luajit optimized.lua', 'by themadsens; runs under luajit'),
 ]
