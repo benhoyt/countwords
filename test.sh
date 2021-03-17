@@ -143,12 +143,12 @@ julia simple.jl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo nim simple
-nim c -d:danger --gc:arc -o:simple-nim simple.nim
+nim c -d:danger -o:simple-nim simple.nim
 ./simple-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo nim optimized
-nim c -d:danger --gc:arc -o:optimized-nim optimized.nim
+nim c -d:danger -o:optimized-nim optimized.nim
 ./optimized-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
