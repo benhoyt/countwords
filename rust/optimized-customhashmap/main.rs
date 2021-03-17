@@ -48,9 +48,8 @@ fn try_main() -> Result<(), Box<dyn Error>> {
                     hash = FNV_OFFSET;
                 }
             } else {
-                if b'A' <= b && b <= b'Z' {
-                    buf[i] += b'a' - b'A';
-                }
+                // 0x20 (6th bit) is the only different bit between lowercase and uppercase
+                buf[i] |= (buf[i].is_ascii_uppercase() as u8) << 5;
                 if start.is_none() {
                     start = Some(i);
                 }
@@ -68,9 +67,9 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     }
 
     let mut ordered = counts.into_counts();
-    ordered.sort_by(|&(_, cnt1), &(_, cnt2)| cnt1.cmp(&cnt2).reverse());
+    ordered.sort_unstable_by_key(|&(_, count)| count);
 
-    for (word, count) in ordered {
+    for (word, count) in ordered.into_iter().rev() {
         writeln!(io::stdout(), "{} {}", std::str::from_utf8(&word)?, count)?;
     }
     Ok(())

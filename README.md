@@ -12,13 +12,19 @@ For the latest results (run on my machine), see the article's [performance resul
 
 Thanks to these contributors for additional language versions:
 
+* Bash: [Jesse Hathaway](https://github.com/lollipopman) - not included in benchmarks as it takes over 2 minutes
 * C#: [John Taylor](https://github.com/jftuga), [Yuriy Ostapenko](https://github.com/uncleyo) and [Osman Turan](https://github.com/osman-turan)
+* C# (LINQ): [Osman Turan](https://github.com/osman-turan) - not run in benchmarks
 * C++ optimized version: [Jussi Pakkanen](https://github.com/jpakkane) and [Adev](https://github.com/adevress)
 * Crystal: [Andrea Manzini](https://github.com/ilmanzo)
 * D: [Ross Lonstein](https://github.com/rlonstein)
-* JavaScript: [Dani Biró](https://github.com/Daninet)
+* F#: [Yuriy Ostapenko](https://github.com/uncleyo)
+* JavaScript: [Dani Biró](https://github.com/Daninet) and [Flo Hinze](https://github.com/laubsauger)
 * Julia: [Alessandro Melis](https://github.com/alemelis)
+* Kotlin: [Kazik Pogoda](https://github.com/morisil)
+* Lua: [Flemming Madsen](https://github.com/themadsens)
 * Nim: [csterritt](https://github.com/csterritt) and [euantorano](https://github.com/euantorano)
+* OCaml: [doesntgolf](https://github.com/doesntgolf)
 * Perl: [Charles Randall](https://github.com/charles-randall)
 * PHP: [Max Semenik](https://github.com/MaxSem)
 * Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)
