@@ -6,10 +6,8 @@
 // There's nothing particularly interesting here other than swapping out std's
 // default hashing algorithm for one that isn't cryptographically secure.
 
-use std::{
-    error::Error,
-    io::{self, Read, Write},
-};
+use std::error::Error;
+use std::io::{self, BufWriter, Read, Write};
 
 // std uses a cryptographically secure hashing algorithm by default, which is
 // a bit slower. In this particular program, fxhash and fnv seem to perform
@@ -19,7 +17,7 @@ use std::{
 //
 // N.B. This crate brings in a new hashing function. We still use std's hashmap
 // implementation.
-use fxhash::{FxHashMap as HashMap};
+use fxhash::FxHashMap as HashMap;
 
 fn main() {
     if let Err(err) = try_main() {
@@ -31,19 +29,20 @@ fn main() {
 fn try_main() -> Result<(), Box<dyn Error>> {
     let stdin = io::stdin();
     let mut stdin = stdin.lock();
-    let mut counts: HashMap<Vec<u8>, u64> = HashMap::default();
-    let mut buf = vec![0; 64 * (1<<10)];
+    let keys = Bump::new();
+    let mut counts: HashMap<&[u8], u64> = HashMap::default();
+    let mut buf = vec![0; 64 * (1 << 10)];
     let mut offset = 0;
     let mut start = None;
     loop {
         let nread = stdin.read(&mut buf[offset..])?;
         if nread == 0 {
             if offset > 0 {
-                increment(&mut counts, &buf[..offset+1]);
+                increment(&keys, &mut counts, &buf[..offset + 1]);
             }
             break;
         }
-        let buf = &mut buf[..offset+nread];
+        let buf = &mut buf[..offset + nread];
 
         for i in (0..buf.len()).skip(offset) {
             let b = buf[i];
@@ -52,7 +51,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
             }
             if b == b' ' || b == b'\n' {
                 if let Some(start) = start.take() {
-                    increment(&mut counts, &buf[start..i]);
+                    increment(&keys, &mut counts, &buf[start..i]);
                 }
             } else if start.is_none() {
                 start = Some(i);
@@ -76,7 +75,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn increment(counts: &mut HashMap<Vec<u8>, u64>, word: &[u8]) {
+fn increment<'bump>(keys: &'bump Bump, counts: &mut HashMap<&'bump [u8], u64>, word: &[u8]) {
     // using 'counts.entry' would be more idiomatic here, but doing so requires
     // allocating a new Vec<u8> because of its API. Instead, we do two hash
     // lookups, but in the exceptionally common case (we see a word we've
@@ -85,5 +84,7 @@ fn increment(counts: &mut HashMap<Vec<u8>, u64>, word: &[u8]) {
         *count += 1;
         return;
     }
-    counts.insert(word.to_vec(), 1);
+    // store keys in another buffer to avoid unnecessary allocation for each key
+    let word = keys.alloc_slice_copy(word);
+    counts.insert(word, 1);
 }
