@@ -2,17 +2,24 @@
 set -o errexit
 set -o nounset
 set -o pipefail
-set -o noglob
 shopt -s lastpipe
 
 # Count frequencies
 declare -iA words_to_freq
-while read -r line; do
-	lowercase_line="${line,,}"
-	for word in $lowercase_line; do
+eof='false'
+set -o noglob
+while [[ "${eof}" == 'false' ]]; do
+	if ! LANG='C' IFS='' read -N 65536 -r block; then
+		eof='true'
+	fi
+	if ! IFS='' read -r line; then
+		eof='true'
+	fi
+	for word in ${block@L}${line@L}; do
 		words_to_freq["${word}"]+=1
 	done
 done
+set +o noglob
 
 # Create a map of unique frequences to tab deliminted words
 declare -A freq_to_words
