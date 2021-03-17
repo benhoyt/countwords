@@ -1,9 +1,8 @@
-﻿// Original version by John Taylor
+// Original version by John Taylor
 
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 
 class Program
@@ -14,7 +13,7 @@ class Program
         string line;
         while ((line = Console.ReadLine()) != null)
         {
-            line = line.ToLower();
+            line = line.ToLowerInvariant();
             var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             foreach (string word in words)
             {

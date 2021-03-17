@@ -8,4 +8,28 @@ To run the tests and benchmarks (you'll need Go, Rust, Python 3, AWK and perhaps
 ./benchmark.py
 ```
 
-Kudos and credits to Andrew Gallant for the Rust versions.
+For the latest results (run on my machine), see the article's [performance results section](https://benhoyt.com/writings/count-words/#performance-results-and-learnings).
+
+Thanks to these contributors for additional language versions:
+
+* Bash: [Jesse Hathaway](https://github.com/lollipopman) - not included in benchmarks as it takes over 2 minutes
+* C#: [John Taylor](https://github.com/jftuga), [Yuriy Ostapenko](https://github.com/uncleyo) and [Osman Turan](https://github.com/osman-turan)
+* C# (LINQ): [Osman Turan](https://github.com/osman-turan) - not run in benchmarks
+* C++ optimized version: [Jussi Pakkanen](https://github.com/jpakkane) and [Adev](https://github.com/adevress)
+* Crystal: [Andrea Manzini](https://github.com/ilmanzo)
+* D: [Ross Lonstein](https://github.com/rlonstein)
+* F#: [Yuriy Ostapenko](https://github.com/uncleyo)
+* JavaScript: [Dani Biró](https://github.com/Daninet) and [Flo Hinze](https://github.com/laubsauger)
+* Julia: [Alessandro Melis](https://github.com/alemelis)
+* Kotlin: [Kazik Pogoda](https://github.com/morisil)
+* Lua: [Flemming Madsen](https://github.com/themadsens)
+* Nim: [csterritt](https://github.com/csterritt) and [euantorano](https://github.com/euantorano)
+* OCaml: [doesntgolf](https://github.com/doesntgolf)
+* Perl: [Charles Randall](https://github.com/charles-randall)
+* PHP: [Max Semenik](https://github.com/MaxSem)
+* Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)
+* Rust: [Andrew Gallant](https://github.com/BurntSushi)
+* Swift: [Daniel Müllenborn](https://github.com/damuellen)
+* Zig: [ifreund](https://github.com/ifreund) and [matu3ba](https://github.com/matu3ba)
+
+See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).

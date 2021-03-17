@@ -33,7 +33,7 @@ fn main() {
 
 fn try_main() -> Result<(), Box<dyn Error>> {
     let stdin = io::stdin();
-    let stdin = io::BufReader::new(stdin.lock());
+    let stdin = stdin.lock();
     let mut counts: HashMap<String, u64> = HashMap::new();
     for result in stdin.lines() {
         let line = result?;
@@ -43,9 +43,10 @@ fn try_main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    let mut ordered: Vec<(String, u64)> = counts.into_iter().collect();
-    ordered.sort_by(|&(_, cnt1), &(_, cnt2)| cnt1.cmp(&cnt2).reverse());
-    for (word, count) in ordered {
+    let mut ordered: Vec<_> = counts.into_iter().collect();
+    ordered.sort_by_key(|&(_, count)| count);
+
+    for (word, count) in ordered.into_iter().rev() {
         writeln!(io::stdout(), "{} {}", word, count)?;
     }
     Ok(())
