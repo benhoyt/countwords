@@ -119,7 +119,7 @@ dotnet build ./csharp/optimized -c Release
 git diff --exit-code output.txt
 
 echo Swift simple
-swiftc simple.swift -O -o simple-swift 
+swiftc simple.swift -O -o simple-swift
 ./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -161,4 +161,9 @@ git diff --exit-code output.txt
 echo OCaml simple
 ocamlopt.opt -O3 simple.ml -o simple-ml
 ./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Java simple
+javac ./java/simple.java -d ./java
+java -cp ./java simple <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
