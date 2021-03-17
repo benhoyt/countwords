@@ -43,6 +43,7 @@ programs = [
     ('OCaml', './simple-ml', None, 'by Nate Dobbins'),
     ('Kotlin', 'java -jar simple-kotlin.jar', None, 'by Kazik Pogoda'),
     ('Lua', 'luajit simple.lua', 'luajit optimized.lua', 'by themadsens; runs under luajit'),
+    ('Zig', './simple-zig', None, 'by ifreund and matu3ba'),
 ]
 
 times = []
