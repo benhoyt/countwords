@@ -17,6 +17,7 @@ use std::io::{self, BufWriter, Read, Write};
 //
 // N.B. This crate brings in a new hashing function. We still use std's hashmap
 // implementation.
+use bumpalo::Bump;
 use fxhash::FxHashMap as HashMap;
 
 fn main() {
@@ -69,8 +70,10 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut ordered: Vec<_> = counts.into_iter().collect();
     ordered.sort_unstable_by_key(|&(_, count)| count);
 
+    let stdout = io::stdout();
+    let mut stdout = BufWriter::new(stdout.lock());
     for (word, count) in ordered.into_iter().rev() {
-        writeln!(io::stdout(), "{} {}", std::str::from_utf8(&word)?, count)?;
+        writeln!(stdout, "{} {}", std::str::from_utf8(&word)?, count)?;
     }
     Ok(())
 }
