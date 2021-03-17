@@ -147,6 +147,11 @@ nim c -d:danger -o:simple-nim simple.nim
 ./simple-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo nim optimized
+nim c -d:danger -o:optimized-nim optimized.nim
+./optimized-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo Perl simple
 perl simple.pl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
