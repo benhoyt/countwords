@@ -44,7 +44,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     }
 
     let mut ordered: Vec<_> = counts.into_iter().collect();
-    ordered.sort_unstable_by_key(|&(_, count)| count);
+    ordered.sort_by_key(|&(_, count)| count);
 
     for (word, count) in ordered.into_iter().rev() {
         writeln!(io::stdout(), "{} {}", word, count)?;
