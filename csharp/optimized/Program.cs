@@ -3,24 +3,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Microsoft.Collections.Extensions;
 
 class Program
 {
     private const int BufferSize = 65536;
 
-    public sealed class Ref<T>
-    {
-        public Ref(T initialValue)
-        {
-            Value = initialValue;
-        }
-        public T Value { get; set; }
-    }
-
     static void Main(string[] args)
     {
-        var counts = new Dictionary<string, Ref<int>>();
+        var counts = new DictionarySlim<string,int>();
         var buffer = new char[BufferSize];
         var offset = 0;
 
@@ -81,14 +74,8 @@ class Program
 
                 // Collect word statistics
                 var word = new String(buffer, start, i - start);
-                if (!counts.TryGetValue(word, out var wordCountRef))
-                {
-                    counts.Add(word, new Ref<int>(1));
-                }
-                else
-                {
-                    ++wordCountRef.Value;
-                }
+                ref var curCount = ref counts.GetOrAddValueRef(word);
+                curCount++;
             }
 
             // Copy remaining part to the beginning of the buffer. 
@@ -104,10 +91,11 @@ class Program
         }
 
         // Finally list all word frequencies.
-        var ordered = counts.OrderByDescending(pair => pair.Value.Value);
+        var ordered = counts.OrderByDescending(pair => pair.Value);
+
         foreach (var entry in ordered)
         {
-            Console.WriteLine($"{entry.Key} {entry.Value.Value}");
+            Console.WriteLine($"{entry.Key} {entry.Value}");
         }
     }
 }
