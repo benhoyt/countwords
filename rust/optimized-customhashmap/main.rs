@@ -49,7 +49,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
                 }
             } else {
                 // 0x20 (6th bit) is the only different bit between lowercase and uppercase
-                buf[i] |= 0x20;
+                buf[i] |= (buf[i].is_ascii_uppercase() as u8) << 5;
                 if start.is_none() {
                     start = Some(i);
                 }
