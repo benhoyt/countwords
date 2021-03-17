@@ -189,3 +189,12 @@ echo Kotlin simple JVM
 kotlinc simple.kt -no-reflect -include-runtime -jvm-target 14 -language-version 1.4 -d simple-kotlin.jar
 java -jar simple-kotlin.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo Raku simple
+raku simple.raku <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Raku optimized
+raku optimized.raku <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
