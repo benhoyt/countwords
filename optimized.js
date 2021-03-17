@@ -11,16 +11,16 @@ const forEachTerminated = (str, token, itemHandler) => {
     const index = str.indexOf(token, lastIndex);
 
     if (index === -1) break;
-    if(index > lastIndex) itemHandler(str.slice(lastIndex, index));
+    itemHandler(str.slice(lastIndex, index));
 
     lastIndex = index + 1;
   }
 
-  if(lastIndex < str.length - 1) return str.slice(lastIndex);
-  return "";
+  return str.slice(lastIndex);
 };
 
 const wordHandler = word => {
+  if(word.length === 0) return;
   dict[word] = (dict[word] || 0) + 1;
 };
 
@@ -31,8 +31,7 @@ const lineHandler = line => {
 const endHandler = () => {
   const entries = Object.entries(dict);
   entries.sort((a, b) =>  b[1] - a[1]);
-  const output = entries.map((entry) => `${entry[0]} ${entry[1]}\n`).join("");
-  process.stdout.write(output);
+  process.stdout.write(entries.map((entry) => `${entry[0]} ${entry[1]}\n`).join(""));
 };
 
 let buffer = "";
