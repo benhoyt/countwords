@@ -9,7 +9,6 @@ name = "countwords"
 path = "main.rs"
 
 [dependencies]
-bumpalo = "3.6.1"
 fxhash = "0.2.1"
 
 [profile.release]
