@@ -3,44 +3,35 @@ import java.util.*;
 
 /**
  * Should work in JDK8+.
+ * 
  * Test: 
  *  $ javac simple.java; echo "one two three one two two" | java simple
  * 
  */
 public class simple {
+    public static void main(String[] args) throws IOException {
+        Map<String, Integer> counts = new HashMap<>();
 
-    public static void main(String[] args) {
-        solve(System.in, System.out);
-    }
-
-    static void solve(InputStream in, OutputStream out) {
-        Map<String, Integer> wc = new HashMap<>();
-
-        try (BufferedReader scan = new BufferedReader(new InputStreamReader(in))) {
-            for (String line = scan.readLine(); line != null; line = scan.readLine()) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line);
                 while (st.hasMoreTokens()) {
-                    String w = st.nextToken();
-                    if (w.length() == 0) {
-                        continue;
+                    String word = st.nextToken().toLowerCase();
+                    if (!word.isEmpty()) {
+                        counts.put(word, counts.getOrDefault(word, 0) + 1);
                     }
-                    wc.compute(w.toLowerCase(), (k, v) -> (v == null) ? 1 : v + 1);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
         }
 
-        List<Map.Entry<String, Integer>> listWC = new ArrayList<>(wc.entrySet());
-        Collections.sort(listWC, (e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+        List<Map.Entry<String, Integer>> countsAsList = new ArrayList<>(counts.entrySet());
+        Collections.sort(countsAsList, Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
-        try (PrintWriter outWriter = new PrintWriter(out)) {
-            for (Map.Entry<String, Integer> e : listWC) {
-                outWriter.print(e.getKey());
-                outWriter.print(" ");
-                outWriter.println(e.getValue());
-            }
+        for (Map.Entry<String, Integer> e : countsAsList) {
+            System.out.print(e.getKey());
+            System.out.print(' ');
+            System.out.println(e.getValue());
         }
     }
 }
