@@ -1,18 +1,13 @@
 #lang racket
 
-(define counter (make-hash))
+(define counter
+  (for*/fold ([counter (hash)])
+             ([line (in-lines)]
+              [word (in-list (string-split line))])
+    (hash-update counter (string-downcase word) add1 0)))
 
-(let loop ()
-  (define line (read-line))
-  (unless (eof-object? line)
-    (define words (string-split (string-downcase line)))
-    (for ([word words])
-      (hash-update! counter word add1 0))
-    (loop)))
+(define sorted (sort (hash->list counter) > #:key cdr))
 
-(define counter-list (hash->list counter))
-(define sorted (sort counter-list > #:key cdr))
-
-(for ([pair sorted])
+(for ([pair (in-list sorted)])
   (printf "~a ~a~%" (car pair) (cdr pair)))
 
