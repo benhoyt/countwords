@@ -61,7 +61,7 @@ g++ -O2 simple.cpp -o simple-cpp
 git diff --exit-code output.txt
 
 echo C++ optimized
-g++ -O2 -DNDEBUG -march=native -std=c++17 optimized.cpp -o optimized-cpp
+g++ -O2 -DNDEBUG -std=c++17 optimized.cpp -o optimized-cpp
 ./optimized-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -71,7 +71,7 @@ gcc -O2 simple.c -o simple-c
 git diff --exit-code output.txt
 
 echo C optimized
-gcc -O2 -march=native optimized.c -o optimized-c
+gcc -O2 optimized.c -o optimized-c
 ./optimized-c <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
