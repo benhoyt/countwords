@@ -9,42 +9,18 @@ import java.util.*;
  *  $ javac optimized.java; echo "one two three one two two" | java optimized
  *
  * This is using custom buffering to cache read characters up to a new word.
- * Using OpenJDK11/OracleJDK11 it actually seems to be slower than StringTokenizer, so I left it out of the benchmark for now.
+ * It's marginally faster than StringTokenizer implementation (probably because I still allocate same number of Strings on tokenization, I just use different buffer size).
  * 
- * using x10 original benchmark:
-    Timing Java 1.13 1.23
-
+ * x10 original benchmark:
     Language      | Simple | Optimized | Notes
     ------------- | ------ | --------- | -----
-    Java          |   1.13 |      1.23 | by Iulian Plesoianu
+    Java          |   1.11 |      1.08 | by Iulian Plesoianu
 
  * using x20 benchmark (doubled the original load):
-    Timing Java 16.15 19.46
-
     Language      | Simple | Optimized | Notes
     ------------- | ------ | --------- | -----
-    Java          |  16.15 |     19.46 | by Iulian Plesoianu
+    Java          |  16.86 |     16.48 | by Iulian Plesoianu
 
- * 
- * I only got marginally better results than simple version using Graal VM which uses a new JIT compiler, which:
- * - I understand it does more aggresive optimizations
- * - it's not widely adopted yet, so I wouldn't consider it relevant for this benchmark
- * https://www.infoq.com/articles/Graal-Java-JIT-Compiler/
- * 
- * using x10 original benchmark:
-    Timing Java 1.23 1.19
-
-    Language      | Simple | Optimized | Notes
-    ------------- | ------ | --------- | -----
-    Java          |   1.23 |      1.19 | by Iulian Plesoianu
- * 
- * using x20 benchmark (doubled the original load):
-    Timing Java 17.47 17.16
-
-    Language      | Simple | Optimized | Notes
-    ------------- | ------ | --------- | -----
-    Java          |  17.47 |     17.16 | by Iulian Plesoianu
- * 
  */
 public class optimized {
     private static final char LINE_END = '\n';
@@ -54,13 +30,13 @@ public class optimized {
     public static void main(String[] args) throws IOException {
         Map<String, Integer> counts = new HashMap<>();
 
-        try (BufferedInputStream reader = new BufferedInputStream(System.in, LINE_BUFFER_SIZE)) {
-            byte[] lineBuffer = new byte[LINE_BUFFER_SIZE];
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in), LINE_BUFFER_SIZE)) {
+            char[] lineBuffer = new char[LINE_BUFFER_SIZE];
             StringBuilder wordBuffer = new StringBuilder(CHAR_BUFFER_SIZE);
             int nrChars;
-            while((nrChars = reader.read(lineBuffer)) != -1) {
+            while((nrChars =  reader.read(lineBuffer)) != -1) {
                 for (int i = 0; i < nrChars; i++) {
-                    byte currentChar = lineBuffer[i];
+                    char currentChar = lineBuffer[i];
                     if (Character.isLetter(currentChar)) {
                         wordBuffer.append(Character.toLowerCase(currentChar));
                     } else if (Character.isSpaceChar(currentChar) || currentChar == LINE_END) {

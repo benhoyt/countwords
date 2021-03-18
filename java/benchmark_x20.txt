@@ -1,0 +1,9 @@
+Language      | Simple | Optimized | Notes
+------------- | ------ | --------- | -----
+Java          |  16.86 |     16.48 | by Iulian Plesoianu
+C             |  17.27 |      3.98 | 
+Go            |  18.79 |      5.61 | 
+Rust          |  22.39 |      5.87 | by Andrew Gallant
+C++           |  29.23 |      6.64 | optimized by Jussi Pakkanen
+JavaScript    |  30.81 |     22.42 | by Dani Biro and Flo Hinze
+Python        |  33.82 |     20.51 | 

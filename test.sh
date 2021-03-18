@@ -194,3 +194,8 @@ echo Java simple
 javac ./java/simple.java -d ./java
 java -cp ./java simple <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo Java optimized
+javac ./java/optimized.java -d ./java
+java -cp ./java optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
