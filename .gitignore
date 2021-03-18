@@ -9,6 +9,7 @@ optimized-cpp
 simple-cs
 simple-cr
 simple-nim
+optimized-nim
 simple-swift
 simple-d
 simple-d.o
@@ -22,3 +23,4 @@ simple-kotlin.jar
 simple-zig
 zig-cache
 /.idea
+java/*.class

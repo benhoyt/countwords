@@ -19,6 +19,7 @@ Thanks to these contributors for additional language versions:
 * Crystal: [Andrea Manzini](https://github.com/ilmanzo)
 * D: [Ross Lonstein](https://github.com/rlonstein)
 * F#: [Yuriy Ostapenko](https://github.com/uncleyo)
+* Java: [Iulian Pleșoianu](https://github.com/bit-twit)
 * JavaScript: [Dani Biró](https://github.com/Daninet) and [Flo Hinze](https://github.com/laubsauger)
 * Julia: [Alessandro Melis](https://github.com/alemelis)
 * Kotlin: [Kazik Pogoda](https://github.com/morisil)
