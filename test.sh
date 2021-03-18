@@ -143,8 +143,13 @@ julia simple.jl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo nim simple
-nim c -d:danger -o:simple-nim simple.nim
+nim c -d:danger --gc:arc -o:simple-nim simple.nim
 ./simple-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo nim optimized
+nim c -d:danger --gc:arc -o:optimized-nim optimized.nim
+./optimized-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Perl simple
@@ -160,12 +165,12 @@ node ./optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo DLang simple
-dmd -release -O -inline -of=simple-d simple.d
+ldc2 -release -O3 -of=simple-d simple.d
 ./simple-d <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo DLang optimized
-dmd -release -O -inline -of=optimized-d optimized.d
+ldc2 -release -O3 -of=optimized-d optimized.d
 ./optimized-d <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -175,7 +180,8 @@ git diff --exit-code output.txt
 
 echo OCaml simple
 ocamlopt.opt -O3 simple.ml -o simple-ml
-./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
+OCAMLRUNPARAM=o=120,a=2 ./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
 
 echo Lua simple
 luajit simple.lua <kjvbible_x10.txt | python3 normalize.py >output.txt
@@ -198,4 +204,9 @@ git diff --exit-code output.txt
 echo Java optimized
 javac ./java/optimized.java -d ./java
 java -cp ./java optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Zig simple
+zig build-exe -OReleaseFast --name simple-zig simple.zig
+./simple-zig <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
