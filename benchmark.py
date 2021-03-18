@@ -25,7 +25,7 @@ programs = [
     ('C', './simple-c', './optimized-c', ''),
     ('Go', './simple-go', './optimized-go', ''),
     ('Rust', './rust/simple/target/release/countwords', './rust/optimized/target/release/countwords', 'by Andrew Gallant'),
-    ('C++', './simple-cpp', './optimized-cpp', 'optimized by Jussi Pakkanen'),
+    ('C++', './simple-cpp', './optimized-cpp', 'optimized by Jussi P, Adev, Nathan M'),
     ('Python', 'python3 simple.py', 'python3 optimized.py', ''),
     ('Ruby', 'ruby simple.rb', 'ruby optimized.rb', 'by Bill Mill'),
     ('C#', './csharp/simple/bin/Release/net5.0/simple', './csharp/optimized/bin/Release/net5.0/optimized', 'by J Taylor, Y Ostapenko, O Turan'),
