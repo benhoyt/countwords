@@ -27,6 +27,7 @@ Thanks to these contributors for additional language versions:
 * OCaml: [doesntgolf](https://github.com/doesntgolf)
 * Perl: [Charles Randall](https://github.com/charles-randall)
 * PHP: [Max Semenik](https://github.com/MaxSem)
+* Racket: [Brad Svercl](https://github.com/bradms) - not included in benchmarks as it's too slow (about 13 seconds)
 * Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)
 * Rust: [Andrew Gallant](https://github.com/BurntSushi)
 * Swift: [Daniel Müllenborn](https://github.com/damuellen)
