@@ -1,58 +1,56 @@
 "use strict";
 const fs = require("fs");
-const dict = {};
 
-// Calls itemHandler on each substring terminated by the token.
-// Returns any leftover characters in the string
-const forEachTerminated = (str, token, itemHandler) => {
-    let lastIndex = 0;
+const BUFFER_SIZE = 64 * 1024;
+const FNV_OFFSET = 2166136261;
+const FNV_PRIME = 16777619;
 
-    for (;;) {
-        const index = str.indexOf(token, lastIndex);
-
-        if (index === -1) break;
-        itemHandler(str.slice(lastIndex, index));
-
-        lastIndex = index + 1;
+class Entry {
+    constructor(word) {
+        this.num = 1;
+        this.word = word;
     }
-
-    return str.slice(lastIndex);
-};
-
-const wordHandler = (word) => {
-    if (word.length === 0) return;
-    const item = dict[word];
-    if (item !== undefined) {
-        item.num++;
-    } else {
-        dict[word] = {num:1};
-    }
-};
-
-const lineHandler = (line) => {
-    if (line.length === 0) return;
-    wordHandler(forEachTerminated(line, " ", wordHandler));
-};
-
-const endHandler = () => {
-    const keys = Object.keys(dict);
-    keys.sort((a, b) => dict[b].num - dict[a].num);
-    process.stdout.write(keys.map((key) => `${key} ${dict[key].num}\n`).join(""));
-};
-
-let buffer = "";
-const BUFSIZE = 64 * 1024;
-const encoding = "utf-8";
-const buf = Buffer.alloc(BUFSIZE, "", encoding);
-let bytesRead;
-const lineToken = "\n";
-for (;;) {
-    bytesRead = fs.readSync(process.stdin.fd, buf, 0, BUFSIZE);
-    if (bytesRead > 0) {
-        buffer = forEachTerminated(buffer + buf.toString(encoding, 0, bytesRead).toLowerCase(), lineToken, lineHandler);
-    } else {
-        if (buffer.length > 0) lineHandler(buffer);
-        endHandler();
-        break;
+    toString() {
+        return `${this.word} ${this.num}\n`;
     }
 }
+
+const toLower = (c) => (c <= 90/* Z */ && c >= 65/* A */) ? c + 32/* a - A */ : c;
+const isDelimiter = c => c === 10/* \n */ || c === 32/* " " */;
+
+const wordCounts = new Map();
+const count = (buffer, size) => {
+    let wordStart = 0;
+    for (let i = 0, hash = FNV_OFFSET; i < size; i++) {
+        const char = toLower(buffer[i]);
+        if (!isDelimiter(char)) {
+            hash = (hash * FNV_PRIME) ^ char;
+        } else {
+            if (i !== wordStart) {
+                const item = wordCounts.get(hash);
+                if (item !== undefined) {
+                    item.num++;
+                } else {
+                    wordCounts.set(hash, new Entry(buffer.toString("ascii", wordStart, i).toLowerCase()));
+                }
+            }
+            hash = FNV_OFFSET;
+            wordStart = i + 1;
+        }
+    }
+    return wordStart;
+}
+
+const buffer = Buffer.allocUnsafe(BUFFER_SIZE);
+const fd = process.stdin.fd;
+let offset = 0;
+let num = 0;
+while ((num = fs.readSync(fd, buffer, 0, BUFFER_SIZE, offset)) > 0) {
+    offset += count(buffer, num);
+}
+
+process.stdout.write(
+    [...wordCounts.values()]
+        .sort((a, b) => b.num - a.num)
+        .join("")
+);
