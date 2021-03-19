@@ -2,7 +2,8 @@ const wordCounter = Object.create(null); //{} has protected and prepopulated key
 
 require("readline").createInterface({input: process.stdin})
   .on("line", line => {
-    line.toLowerCase().trim().split(' ').forEach(word => {
+    line.toLowerCase().split(' ').forEach(word => {
+      if (!word) return;
       wordCounter[word] = (wordCounter[word] || 0) + 1;
     });
   })
