@@ -1,10 +1,9 @@
 import collections
 import sys
 
-counts = collections.Counter()
-for line in sys.stdin:
-    words = line.lower().split()
-    counts.update(words)
-
-for word, count in counts.most_common():
+for word, count in collections.Counter(
+    word
+    for line in sys.stdin
+    for word in line.lower().split()
+).most_common():
     print(word, count)
