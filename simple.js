@@ -1,29 +1,16 @@
-"use strict";
+const wordCounter = Object.create(null); //{} has protected and prepopulated keys, Map() is slower
 
-const rd = require("readline");
+require("readline").createInterface({input: process.stdin})
+  .on("line", line => {
+    line.toLowerCase().trim().split(' ').forEach(word => {
+      wordCounter[word] = (wordCounter[word] || 0) + 1;
+    });
+  })
+  .on("close", () => {
+    let result = Object.entries(wordCounter)
+      .sort((a, b) =>  b[1] - a[1])
+      .map(entry => `${entry[0]} ${entry[1]}\n`)
+      .join("");
 
-const dict = {};
-
-const wordHandler = word => {
-  if (!word) return;
-  dict[word] = (dict[word] || 0) + 1;
-};
-
-const lineHandler = line => {
-  if (!line) return;
-  line.toLowerCase().split(' ').forEach(wordHandler);
-};
-
-const endHandler = () => {
-  const entries = Object.entries(dict);
-  entries.sort((a, b) =>  b[1] - a[1]);
-  entries.forEach(entry => console.log(`${entry[0]} ${entry[1]}`));
-};
-
-rd.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false,
-})
-  .on("line", lineHandler)
-  .on("close", endHandler);
+    console.log(result);
+  });
