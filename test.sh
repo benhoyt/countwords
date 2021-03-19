@@ -210,3 +210,8 @@ echo Zig simple
 zig build-exe -OReleaseFast --name simple-zig simple.zig
 ./simple-zig <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo Haskell simple
+ghc -O2 simple.hs
+./simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt

@@ -33,5 +33,6 @@ Thanks to these contributors for additional language versions:
 * Rust: [Andrew Gallant](https://github.com/BurntSushi)
 * Swift: [Daniel Müllenborn](https://github.com/damuellen)
 * Zig: [ifreund](https://github.com/ifreund) and [matu3ba](https://github.com/matu3ba)
+* Haskell: [Noah Haasis](https://github.com/noahhaasis)
 
 See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).
