@@ -216,6 +216,11 @@ zig build-exe -OReleaseFast --name simple-zig simple.zig
 ./simple-zig <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Zig optimized
+zig build-exe -OReleaseFast --name optimized-zig optimized.zig
+./optimized-zig <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo Common Lisp simple
 sbcl --load simple.lisp --eval "(sb-ext:save-lisp-and-die #p\"simple-cl\" :toplevel #'main :executable t :purify t)"
 ./simple-cl <kjvbible_x10.txt | python3 normalize.py >output.txt
