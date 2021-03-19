@@ -1,53 +1,58 @@
 "use strict";
-
-const rd = require("readline");
-
+const fs = require("fs");
 const dict = {};
 
-function RefNum(num) {
-  this.num = num;
-}
+// Calls itemHandler on each substring terminated by the token.
+// Returns any leftover characters in the string
+const forEachTerminated = (str, token, itemHandler) => {
+    let lastIndex = 0;
 
-RefNum.prototype.toString = function () {
-  return this.num.toString();
+    for (;;) {
+        const index = str.indexOf(token, lastIndex);
+
+        if (index === -1) break;
+        itemHandler(str.slice(lastIndex, index));
+
+        lastIndex = index + 1;
+    }
+
+    return str.slice(lastIndex);
 };
 
 const wordHandler = (word) => {
-  if (word.length === 0) return;
-  word = word.toLowerCase();
-  const item = dict[word];
-  if (item !== undefined) {
-    item.num++;
-  } else {
-    dict[word] = new RefNum(1);
-  }
+    if (word.length === 0) return;
+    const item = dict[word];
+    if (item !== undefined) {
+        item.num++;
+    } else {
+        dict[word] = {num:1};
+    }
 };
 
 const lineHandler = (line) => {
-  let lastIndex = 0;
-  while (true) {
-    const index = line.indexOf(" ", lastIndex);
-    if (index === -1) {
-      wordHandler(line.slice(lastIndex));
-      return;
-    }
-
-    wordHandler(line.slice(lastIndex, index));
-    lastIndex = index + 1;
-  }
+    if (line.length === 0) return;
+    wordHandler(forEachTerminated(line, " ", wordHandler));
 };
 
 const endHandler = () => {
-  const keys = Object.keys(dict);
-  keys.sort((a, b) => dict[b].num - dict[a].num);
-
-  process.stdout.write(keys.map((key) => `${key} ${dict[key].num}\n`).join(""));
+    const keys = Object.keys(dict);
+    keys.sort((a, b) => dict[b].num - dict[a].num);
+    process.stdout.write(keys.map((key) => `${key} ${dict[key].num}\n`).join(""));
 };
 
-rd.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false,
-})
-  .on("line", lineHandler)
-  .on("close", endHandler);
+let buffer = "";
+const BUFSIZE = 64 * 1024;
+const encoding = "utf-8";
+const buf = Buffer.alloc(BUFSIZE, "", encoding);
+let bytesRead;
+const lineToken = "\n";
+for (;;) {
+    bytesRead = fs.readSync(process.stdin.fd, buf, 0, BUFSIZE);
+    if (bytesRead > 0) {
+        buffer = forEachTerminated(buffer + buf.toString(encoding, 0, bytesRead).toLowerCase(), lineToken, lineHandler);
+    } else {
+        if (buffer.length > 0) lineHandler(buffer);
+        endHandler();
+        break;
+    }
+}

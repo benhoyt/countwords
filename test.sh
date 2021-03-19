@@ -61,7 +61,7 @@ g++ -O2 simple.cpp -o simple-cpp
 git diff --exit-code output.txt
 
 echo C++ optimized
-g++ -O2 -DNDEBUG  -std=c++17 optimized.cpp -o optimized-cpp
+g++ -O2 -DNDEBUG -std=c++17 optimized.cpp -o optimized-cpp
 ./optimized-cpp <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -118,6 +118,11 @@ dotnet build ./csharp/optimized -c Release
 ./csharp/optimized/bin/Release/net5.0/optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo C# linq
+dotnet build ./csharp/linq -c Release
+./csharp/linq/bin/Release/net5.0/linq <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
 echo F# simple
 dotnet build ./fsharp/simple -c Release
 ./fsharp/simple/bin/Release/net5.0/simple <kjvbible_x10.txt | python3 normalize.py >output.txt
@@ -129,7 +134,7 @@ dotnet build ./fsharp/optimized -c Release
 git diff --exit-code output.txt
 
 echo Swift simple
-swiftc simple.swift -O -o simple-swift 
+swiftc simple.swift -O -o simple-swift
 ./simple-swift <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -138,8 +143,13 @@ julia simple.jl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo nim simple
-nim c -d:danger -o:simple-nim simple.nim
+nim c -d:danger --gc:arc -o:simple-nim simple.nim
 ./simple-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo nim optimized
+nim c -d:danger --gc:arc -o:optimized-nim optimized.nim
+./optimized-nim <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Perl simple
@@ -155,12 +165,12 @@ node ./optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo DLang simple
-dmd -release -O -inline -of=simple-d simple.d
+ldc2 -release -O3 -of=simple-d simple.d
 ./simple-d <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo DLang optimized
-dmd -release -O -inline -of=optimized-d optimized.d
+ldc2 -release -O3 -of=optimized-d optimized.d
 ./optimized-d <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
@@ -170,5 +180,33 @@ git diff --exit-code output.txt
 
 echo OCaml simple
 ocamlopt.opt -O3 simple.ml -o simple-ml
-./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
+OCAMLRUNPARAM=o=120,a=2 ./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Lua simple
+luajit simple.lua <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Lua optimized
+luajit optimized.lua <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Kotlin simple JVM
+kotlinc simple.kt -no-reflect -include-runtime -jvm-target 14 -language-version 1.4 -d simple-kotlin.jar
+java -jar simple-kotlin.jar <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Java simple
+javac ./java/simple.java -d ./java
+java -cp ./java simple <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Java optimized
+javac ./java/optimized.java -d ./java
+java -cp ./java optimized <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt
+
+echo Zig simple
+zig build-exe -OReleaseFast --name simple-zig simple.zig
+./simple-zig <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt

@@ -1,70 +1,65 @@
 #include <algorithm>
-#include <cctype>
+#include <cinttypes>
 #include <iostream>
-#include <string>
+#include <iterator>
 #include <string_view>
-#include <unordered_map>
 #include <vector>
 
-#ifdef USE_ABSEIL
-#include <absl/container/flat_hash_map.h>
-typedef absl::flat_hash_map<std::string, int> word_map;
-#else
-typedef std::unordered_map<std::string, int> word_map;
-#endif
+struct table {
+  static const inline uint64_t
+    size = 1<<16, hinit = 0xcbf29ce484222325ULL, hnext = 0x100000001b3ULL;
+  struct range { int b; std::uint16_t sz; }; // { offset into words, len }
+  struct cell { int count = 0; range word; };  // a hash entry
 
-constexpr std::size_t max_buffer_size = 1 << 16;
+  std::uint64_t hash = hinit;
+  int words_end = 0;
+  std::vector<char> words;
+  cell buckets[size];
 
-bool is_delimiter(char c) { return c == ' ' || c == '\n' || c == '\r'; }
-
-char simple_ascii_lower(char c) {
-  if (c < 'A' || c > 'Z') {
-    return c;
+  explicit table() { words.reserve(1<<19); }
+  void push(char c) { words.push_back(c); hash = hash * hnext ^ c; }
+  std::string_view word_at(range w) { return {&words[w.b], w.sz}; }
+  bool match(range a, range b) {
+    return a.sz == b.sz && word_at(a) == word_at(b);
   }
-  return c + ('a' - 'A');
-}
-
-void add_to_counter(word_map &counter, std::string &w) {
-  if (!w.empty()) {
-    ++counter[w];
-    w.clear();
-  }
-}
-
-int main(int argc, char **argv) {
-  std::ios_base::sync_with_stdio(false);
-
-  std::string word;
-  std::array<char, max_buffer_size> buffer;
-  ssize_t read_size = 0;
-
-  word_map counts;
-  counts.reserve(
-      25000); // an average english speaker has 25K words of vocabulary
-
-  while ((read_size = std::cin.readsome(buffer.data(), buffer.size())) > 0) {
-    std::string_view sbuffer(buffer.data(), read_size);
-    for (const auto c : sbuffer) {
-      if (!is_delimiter(c)) {
-        word.push_back(simple_ascii_lower(c));
-      } else {
-        add_to_counter(counts, word);
+  void count_one() {
+    if (int(words.size()) != words_end) {
+      range word = {words_end, std::uint16_t(words.size() - words_end)};
+      auto* bucket = &buckets[hash & (size-1)];
+      while (bucket->count && !match(bucket->word, word)) {
+        bucket = (bucket == buckets) ? buckets + size - 1 : bucket - 1;
       }
+      if (! bucket->count) {
+        *bucket = {1, word}, words_end += word.sz;
+      } else ++bucket->count, words.resize(words_end);
+      hash = hinit;
     }
   }
-  if (std::cin.bad()) {
-    std::cerr << "error reading stdin\n";
-    return 1;
-  } else {
-    add_to_counter(counts, word);
+  void sort() {
+    std::sort(buckets, buckets + size, [](cell const& a, cell const& b) {
+      return a.count > b.count; });
   }
-
-  std::vector<std::pair<std::string_view, int>> ordered(counts.begin(),
-                                                        counts.end());
-  std::sort(ordered.begin(), ordered.end(),
-            [](auto const &a, auto const &b) { return a.second > b.second; });
-
-  for (auto const &count : ordered) {
-    std::cout << count.first << ' ' << count.second << '\n';
+  void dump(std::ostream& os) {
+    for (auto& b: buckets) {
+      if (b.count) {
+        os << word_at(b.word) << ' ' << b.count << '\n';
+      } else break;
+    }
   }
+};
+
+int main() {
+  std::ios::sync_with_stdio(false);
+  auto to_lower = [](unsigned char c) { return (c-'A' < 26) ? c|'\x20' : c; };
+  table counts;
+  for (std::istreambuf_iterator<char> it(std::cin), end; it != end; ++it) {
+    char c = *it;
+    if (c <= ' ') {
+      counts.count_one();
+    } else {
+      counts.push(to_lower(c));
+    }
+  }
+  counts.sort();
+  counts.dump(std::cout);
 }
