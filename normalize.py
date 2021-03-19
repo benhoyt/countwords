@@ -23,11 +23,11 @@ def print_group(group):
 
 prev = None
 group = []
-for line in sys.stdin:
+for i, line in enumerate(sys.stdin, start=1):
     try:
         word, count = line.split()
     except ValueError:
-        print('cannot split: {!r}'.format(line), file=sys.stderr)
+        print('line {}, cannot split: {!r}'.format(i, line), file=sys.stderr)
         raise
     if count != prev:
         print_group(group)

@@ -10,8 +10,8 @@ require("readline").createInterface({input: process.stdin})
   .on("close", () => {
     let result = Object.entries(wordCounter)
       .sort((a, b) =>  b[1] - a[1])
-      .map(entry => `${entry[0]} ${entry[1]}\n`)
-      .join("");
+      .map(entry => `${entry[0]} ${entry[1]}`)
+      .join("\n");
 
     console.log(result);
   });
