@@ -21,6 +21,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	type Count struct {
+		Word  string
+		Count int
+	}
+
 	var ordered []Count
 	for word, count := range counts {
 		ordered = append(ordered, Count{word, count})
@@ -32,9 +37,4 @@ func main() {
 	for _, count := range ordered {
 		fmt.Println(string(count.Word), count.Count)
 	}
-}
-
-type Count struct {
-	Word  string
-	Count int
 }
