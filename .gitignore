@@ -2,6 +2,7 @@ kjvbible_x10.txt
 cpuprofile
 simple-go
 optimized-go
+parallel-go
 simple-c
 optimized-c
 simple-cpp
