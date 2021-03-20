@@ -18,7 +18,7 @@
 use std::{
     collections::HashMap,
     error::Error,
-    io::{self, BufRead, Write},
+    io::{self, BufRead, BufWriter, Write},
 };
 
 fn main() {
@@ -46,8 +46,10 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut ordered: Vec<_> = counts.into_iter().collect();
     ordered.sort_by_key(|&(_, count)| count);
 
+    let stdout = io::stdout();
+    let mut stdout = BufWriter::new(stdout.lock());
     for (word, count) in ordered.into_iter().rev() {
-        writeln!(io::stdout(), "{} {}", word, count)?;
+        writeln!(stdout, "{} {}", word, count)?;
     }
     Ok(())
 }

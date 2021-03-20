@@ -19,7 +19,7 @@ use std::{
 //
 // N.B. This crate brings in a new hashing function. We still use std's hashmap
 // implementation.
-use fxhash::{FxHashMap as HashMap};
+use fxhash::FxHashMap as HashMap;
 
 fn main() {
     if let Err(err) = try_main() {
@@ -32,18 +32,18 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let stdin = io::stdin();
     let mut stdin = stdin.lock();
     let mut counts: HashMap<Vec<u8>, u64> = HashMap::default();
-    let mut buf = vec![0; 64 * (1<<10)];
+    let mut buf = vec![0; 64 * (1 << 10)];
     let mut offset = 0;
     let mut start = None;
     loop {
         let nread = stdin.read(&mut buf[offset..])?;
         if nread == 0 {
             if offset > 0 {
-                increment(&mut counts, &buf[..offset+1]);
+                increment(&mut counts, &buf[..offset + 1]);
             }
             break;
         }
-        let buf = &mut buf[..offset+nread];
+        let buf = &mut buf[..offset + nread];
 
         for i in (0..buf.len()).skip(offset) {
             let b = buf[i];
