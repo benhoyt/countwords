@@ -1,65 +1,64 @@
 #include <algorithm>
 #include <cinttypes>
+#include <cassert>
 #include <iostream>
 #include <iterator>
 #include <string_view>
-#include <vector>
 
-struct table {
-  static const inline uint64_t
-    size = 1<<16, hinit = 0xcbf29ce484222325ULL, hnext = 0x100000001b3ULL;
-  struct range { int b; std::uint16_t sz; }; // { offset into words, len }
-  struct cell { int count = 0; range word; };  // a hash entry
+template <std::size_t hash_size, std::size_t words_buf_size>
+class table {
+  enum : std::uint64_t { hash_init = 0xcbf29ce484222325ULL };
+  enum : std::uint64_t { hash_next = 0x100000001b3ULL };
+  struct range { int place; std::uint16_t sz; }; // { offset into words, size }
+  struct cell { int count = 0; range word; };    // a hash entry
 
-  std::uint64_t hash = hinit;
-  int words_end = 0;
-  std::vector<char> words;
-  cell buckets[size];
+  std::uint64_t hash = hash_init;
+  char* tail = words; char* back = words;
+  std::size_t entries = 0;
+  cell buckets[hash_size];
+  char words[words_buf_size];
 
-  explicit table() { words.reserve(1<<19); }
-  void push(char c) { words.push_back(c); hash = hash * hnext ^ c; }
-  std::string_view word_at(range w) { return {&words[w.b], w.sz}; }
-  bool match(range a, range b) {
-    return a.sz == b.sz && word_at(a) == word_at(b);
+  auto word_at(range w) { return std::string_view{words + w.place, w.sz}; }
+public:
+  void push(char c) {
+    assert(std::size_t(back - words) < sizeof(words));
+    *back++ = c, hash = hash * hash_next ^ c;
   }
   void count_one() {
-    if (int(words.size()) != words_end) {
-      range word = {words_end, std::uint16_t(words.size() - words_end)};
-      auto* bucket = &buckets[hash & (size-1)];
-      while (bucket->count && !match(bucket->word, word)) {
-        bucket = (bucket == buckets) ? buckets + size - 1 : bucket - 1;
-      }
+    if (back != tail) {
+      std::string_view  key{tail, std::size_t(back-tail)};
+      auto match = [key,this](range word) {
+        return word.sz == key.size() && word_at(word) == key; };
+      auto* bucket = &buckets[hash % hash_size]; // op& if hash_size is 2^n
+      for (; bucket->count && !match(bucket->word);
+        bucket = (bucket == buckets) ? buckets+hash_size-1 : bucket-1) {}
       if (! bucket->count) {
-        *bucket = {1, word}, words_end += word.sz;
-      } else ++bucket->count, words.resize(words_end);
-      hash = hinit;
+        assert(++entries < hash_size/2);
+        range word = {int(tail - words), std::uint16_t(back - tail)};
+        *bucket = {1, word }, tail = back;  // keep new word
+      } else ++bucket->count, back = tail;  // discard word
+      hash = hash_init;
     }
   }
-  void sort() {
-    std::sort(buckets, buckets + size, [](cell const& a, cell const& b) {
+  void dump(std::ostream& out) {
+    auto end = std::partition(buckets, buckets + hash_size, [](auto& b){
+      return b.count != 0; });
+    std::sort(buckets, end, [](cell& a, cell& b) {
       return a.count > b.count; });
-  }
-  void dump(std::ostream& os) {
-    for (auto& b: buckets) {
-      if (b.count) {
-        os << word_at(b.word) << ' ' << b.count << '\n';
-      } else break;
-    }
+    std::for_each(buckets, end, [&](cell& b) {
+      out << word_at(b.word) << ' ' << b.count << '\n'; });
   }
 };
+table<(1<<16), (1<<19)> counts;
 
 int main() {
   std::ios::sync_with_stdio(false);
-  auto to_lower = [](unsigned char c) { return (c-'A' < 26) ? c|'\x20' : c; };
-  table counts;
+  auto to_lower = [](unsigned char c) { return c | (-(c-'A' < 26) & '\x20'); };
   for (std::istreambuf_iterator<char> it(std::cin), end; it != end; ++it) {
-    char c = *it;
-    if (c <= ' ') {
+    if (*it <= ' ') {
       counts.count_one();
-    } else {
-      counts.push(to_lower(c));
-    }
+    } else counts.push(to_lower(*it));
   }
-  counts.sort();
+  counts.count_one(); // in case file ends without whitespace
   counts.dump(std::cout);
 }
