@@ -8,27 +8,33 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"runtime/pprof"
 	"runtime/trace"
 	"sort"
-	"strings"
+	"unicode"
+	"unicode/utf8"
 )
 
 var (
 	procFactor = 1.0
 
+	bufSize      int = 64 * 1024
 	minChunkSize int = 64 * 1024
 
 	tokenSplit = bufio.ScanWords
 )
 
 func main() {
-	traceTo := flag.String("trace", "", "enable runtime tracing")
+	cpuprofile := flag.String("cpuprofile", "", "write cpu profile to `file`")
+	memprofile := flag.String("memprofile", "", "write memory profile to `file`")
+	tracefile := flag.String("trace", "", "enable runtime tracing")
+	flag.IntVar(&bufSize, "buf-size", bufSize, "scan buffer size")
 	flag.IntVar(&minChunkSize, "min-chunk-size", minChunkSize, "minimum chunk size for concurrent input splitting")
 	flag.Float64Var(&procFactor, "proc-factor", procFactor, "processor over-scheduling factor; set to 0 to disable concurrent processing")
 	flag.Parse()
 
-	if *traceTo != "" {
-		f, err := os.Create(*traceTo)
+	if *tracefile != "" {
+		f, err := os.Create(*tracefile)
 		if err == nil {
 			defer f.Close()
 			err = trace.Start(f)
@@ -39,8 +45,32 @@ func main() {
 		defer trace.Stop()
 	}
 
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal("could not create CPU profile: ", err)
+		}
+		defer f.Close() // error handling omitted for example
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Fatal("could not start CPU profile: ", err)
+		}
+		defer pprof.StopCPUProfile()
+	}
+
 	if err := errMain(); err != nil {
 		log.Fatal(err)
+	}
+
+	if *memprofile != "" {
+		f, err := os.Create(*memprofile)
+		if err != nil {
+			log.Fatal("could not create memory profile: ", err)
+		}
+		defer f.Close()
+		runtime.GC() // get up-to-date statistics
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Fatal("could not write memory profile: ", err)
+		}
 	}
 }
 
@@ -165,18 +195,29 @@ func errMain() error {
 	return nil
 }
 
-type result map[string]int
+type result map[string]*int
 
 // countTokens is the core token scanning and counting routine
 func countTokens(in io.Reader, split bufio.SplitFunc) (result, error) {
 	scanner := bufio.NewScanner(in)
+	scanner.Buffer(make([]byte, bufSize), bufSize)
 	scanner.Split(split)
 	counts := make(result)
+	var word []byte
 	for scanner.Scan() {
-		word := strings.ToLower(scanner.Text())
-		counts[word]++
+		word = toLowerInto(scanner.Bytes(), word)
+		counts.count(word)
 	}
 	return counts, scanner.Err()
+}
+
+func (counts result) count(s []byte) {
+	if c := counts[string(s)]; c != nil {
+		*c++
+	} else {
+		n := 1
+		counts[string(s)] = &n
+	}
 }
 
 // report writes sorted counts to an output writer
@@ -188,7 +229,7 @@ func (counts result) report(out io.Writer) error {
 
 	ordered := make([]Count, 0, len(counts))
 	for word, count := range counts {
-		ordered = append(ordered, Count{word, count})
+		ordered = append(ordered, Count{word, *count})
 	}
 	sort.Slice(ordered, func(i, j int) bool {
 		return ordered[i].Count > ordered[j].Count
@@ -202,9 +243,15 @@ func (counts result) report(out io.Writer) error {
 	return nil
 }
 
+// merge another set of counts
+// NOTE the other counts must no longer be used after this call
 func (counts result) merge(other result) {
 	for word, count := range other {
-		counts[word] += count
+		if c := counts[word]; c != nil {
+			*c += *count
+		} else {
+			counts[word] = count
+		}
 	}
 }
 
@@ -355,4 +402,64 @@ func readerSize(ra io.ReaderAt) (int64, error) {
 	}
 
 	return 0, nil
+}
+
+// toLowerInto is a copy of bytes.ToLower and an inlined/specialized copy of
+// bytes.Map that works withing a reusable byte slice.
+func toLowerInto(s, b []byte) []byte {
+	isASCII, hasUpper := true, false
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		if c >= utf8.RuneSelf {
+			isASCII = false
+			break
+		}
+		hasUpper = hasUpper || ('A' <= c && c <= 'Z')
+	}
+
+	b = b[:cap(b)]
+	if len(b) < len(s) {
+		b = make([]byte, len(s))
+	}
+
+	if isASCII { // optimize for ASCII-only byte slices.
+		if !hasUpper {
+			return append(b[:0], s...)
+		}
+		i := 0
+		for ; i < len(s); i++ {
+			c := s[i]
+			if 'A' <= c && c <= 'Z' {
+				c += 'a' - 'A'
+			}
+			b[i] = c
+		}
+		return b[:i]
+	}
+
+	nbytes := 0 // number of bytes encoded in b
+	for i := 0; i < len(s); {
+		wid := 1
+		r := rune(s[i])
+		if r >= utf8.RuneSelf {
+			r, wid = utf8.DecodeRune(s[i:])
+		}
+		r = unicode.ToLower(r)
+		if r >= 0 {
+			rl := utf8.RuneLen(r)
+			if rl < 0 {
+				rl = len(string(utf8.RuneError))
+			}
+			if max := len(b); nbytes+rl > max {
+				// Grow the buffer.
+				max = max*2 + utf8.UTFMax
+				nb := make([]byte, max)
+				copy(nb, b[0:nbytes])
+				b = nb
+			}
+			nbytes += utf8.EncodeRune(b[nbytes:], r)
+		}
+		i += wid
+	}
+	return b[0:nbytes]
 }
