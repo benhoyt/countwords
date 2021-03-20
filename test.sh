@@ -183,11 +183,6 @@ ocamlopt.opt -O3 simple.ml -o simple-ml
 ./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
-echo OCaml optimized
-ocamlopt.opt unix.cmxa -O3 optimized.ml -o optimized-ml
-./optimized-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
-git diff --exit-code output.txt
-
 echo Lua simple
 luajit simple.lua <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
