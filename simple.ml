@@ -12,7 +12,9 @@ let () =
   let countwords = StringHashtbl.create 33_000 in
   try
     while true do
-      read_line () |> String.lowercase_ascii |> String.split_on_char ' '
+      read_line ()
+      |> String.lowercase_ascii
+      |> String.split_on_char ' '
       |> List.iter (function
            | "" -> ()
            | word -> (
