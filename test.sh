@@ -216,3 +216,7 @@ sbcl --load simple.lisp --eval "(sb-ext:save-lisp-and-die #p\"simple-cl\" :tople
 ./simple-cl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
+echo Haskell simple
+ghc --make simple.hs -o simple-haskell
+./simple-haskell <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt

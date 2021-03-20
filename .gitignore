@@ -25,3 +25,6 @@ zig-cache
 /.idea
 java/*.class
 simple-cl
+simple-haskell
+simple.o
+simple.hi
