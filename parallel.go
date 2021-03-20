@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"runtime/trace"
 	"sort"
 	"strings"
 )
@@ -21,9 +22,22 @@ var (
 )
 
 func main() {
+	traceTo := flag.String("trace", "", "enable runtime tracing")
 	flag.IntVar(&minChunkSize, "min-chunk-size", minChunkSize, "minimum chunk size for concurrent input splitting")
 	flag.Float64Var(&procFactor, "proc-factor", procFactor, "processor over-scheduling factor; set to 0 to disable concurrent processing")
 	flag.Parse()
+
+	if *traceTo != "" {
+		f, err := os.Create(*traceTo)
+		if err == nil {
+			defer f.Close()
+			err = trace.Start(f)
+		}
+		if err != nil {
+			log.Fatalln("unable to start trace", err)
+		}
+		defer trace.Stop()
+	}
 
 	if err := errMain(); err != nil {
 		log.Fatal(err)
