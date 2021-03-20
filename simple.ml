@@ -12,21 +12,20 @@ let () =
   let countwords = StringHashtbl.create 33_000 in
   try
     while true do
-      read_line ()
-      |> String.lowercase_ascii
-      |> String.split_on_char ' '
+      read_line () |> String.lowercase_ascii |> String.split_on_char ' '
       |> List.iter (function
-             | "" ->
-               ()
-             | word ->
-               (match StringHashtbl.find countwords word with
-               | v ->
-                 StringHashtbl.replace countwords word (v + 1)
-               | exception Not_found ->
-                 StringHashtbl.add countwords word 1))
+           | "" -> ()
+           | word -> (
+               try incr (StringHashtbl.find countwords word)
+               with Not_found -> StringHashtbl.add countwords word (ref 1)))
     done
-  with
-  | End_of_file ->
-    StringHashtbl.fold (fun k v acc -> (k, v) :: acc) countwords []
-    |> List.sort (fun (_, x) (_, y) -> Int.compare y x)
-    |> List.iter (fun (w, c) -> Printf.printf "%s %d\n" w c)
+  with End_of_file ->
+    let arr = Array.make (StringHashtbl.length countwords) ("", 0) in
+    let idx = ref 0 in
+    StringHashtbl.iter
+      (fun word count ->
+        arr.(!idx) <- (word, !count);
+        incr idx)
+      countwords;
+    Array.sort (fun (_, x) (_, y) -> Int.compare y x) arr;
+    Array.iter (fun (w, c) -> Printf.printf "%s %d\n" w c) arr

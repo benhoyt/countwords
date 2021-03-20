@@ -19,6 +19,10 @@ simple-ml
 simple.cmi
 simple.cmx
 simple.o
+optimized-ml
+optimized.cmi
+optimized.cmx
+optimized.o
 simple-kotlin.jar
 simple-zig
 zig-cache
