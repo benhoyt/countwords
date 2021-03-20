@@ -45,6 +45,7 @@ programs = [
     ('Lua', 'luajit simple.lua', 'luajit optimized.lua', 'by themadsens; runs under luajit'),
     ('Java', 'java -server -cp ./java simple', 'java -server -cp ./java optimized', 'by Iulian Plesoianu'),
     ('Zig', './simple-zig', None, 'by ifreund and matu3ba'),
+    ('Common Lisp', './simple-cl', None, 'by Brad Svercl'),
 ]
 
 times = []
