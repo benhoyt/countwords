@@ -180,7 +180,7 @@ git diff --exit-code output.txt
 
 echo OCaml simple
 ocamlopt.opt -O3 simple.ml -o simple-ml
-OCAMLRUNPARAM=o=120,a=2 ./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
+./simple-ml <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
 
 echo Lua simple
