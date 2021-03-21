@@ -8,7 +8,7 @@ To run the tests and benchmarks (you'll need Go, Rust, Python 3, AWK and perhaps
 ./benchmark.py
 ```
 
-For the latest results (run on my machine), see the article's [performance results section](https://benhoyt.com/writings/count-words/#performance-results-and-learnings).
+For the latest results (run on my machine against these [versions](https://github.com/benhoyt/countwords/blob/master/versions.txt)), see the article's [performance results section](https://benhoyt.com/writings/count-words/#performance-results-and-learnings).
 
 Thanks to these contributors for additional language versions:
 
