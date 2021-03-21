@@ -86,7 +86,7 @@ fn increment<'a>(keys_outer: &'a Cell<Vec<u8>>, counts: &mut HashMap<&'a [u8], u
     assert!(keys.len() + word.len() <= keys.capacity());
     keys.extend_from_slice(word);
     // Safety: extend the lifetime of keys since are reusing the same buffer like an arena
-    let word = unsafe { std::mem::transmute(&keys[start..start + word.len()]) };
+    let word: &'a [u8] = unsafe { std::mem::transmute(&keys[start..start + word.len()]) };
     counts.insert(word, 1);
     keys_outer.set(keys); // store it back
 }
