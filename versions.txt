@@ -1,0 +1,29 @@
+Linux version: 5.8.0-40-generic
+
+Python 3.8.5
+ruby 2.7.0p0 (2019-12-25 revision 647ee6f091) [x86_64-linux-gnu]
+go version go1.16 linux/amd64
+rustc 1.50.0 (cb75ad5db 2021-02-10)
+g++ (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
+gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
+GNU Awk 5.0.1, API: 2.0 (GNU MPFR 4.0.2, GNU MP 6.2.0)
+mawk 1.3.4 20200120
+GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
+Crystal 0.36.1 [c3a3c1823] (2021-02-02)
+C#/F#/dotnet: 5.0.201
+Swift version 5.3.3 (swift-5.3.3-RELEASE)
+julia version 1.4.1
+Nim Compiler Version 1.4.4 [Linux: amd64]
+This is perl 5, version 30, subversion 0 (v5.30.0) built for x86_64-linux-gnu-thread-multi
+JavaScript/node: v10.19.0
+LDC - the LLVM D compiler (1.25.1):
+  based on DMD v2.095.1 and LLVM 11.0.1
+  built with LDC - the LLVM D compiler (1.25.1)
+PHP 7.4.3 (cli) (built: Oct  6 2020 15:47:56) ( NTS )
+OCaml: 4.08.1
+LuaJIT 2.1.0-beta3 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/
+info: kotlinc-jvm 1.4.31 (JRE 14.0.2+12-Ubuntu-120.04)
+javac 14.0.2
+Zig: 0.7.1
+SBCL 2.0.1.debian
+gforth 0.7.9_20210218 amd64
