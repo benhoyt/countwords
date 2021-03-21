@@ -15,7 +15,7 @@ Swift version 5.3.3 (swift-5.3.3-RELEASE)
 julia version 1.4.1
 Nim Compiler Version 1.4.4 [Linux: amd64]
 This is perl 5, version 30, subversion 0 (v5.30.0) built for x86_64-linux-gnu-thread-multi
-JavaScript/node: v10.19.0
+JavaScript/node: v15.12.0
 LDC - the LLVM D compiler (1.25.1):
   based on DMD v2.095.1 and LLVM 11.0.1
   built with LDC - the LLVM D compiler (1.25.1)
