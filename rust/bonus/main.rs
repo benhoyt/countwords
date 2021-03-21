@@ -17,10 +17,10 @@
 // The gauntlet has been laid down. How hard is to port this program to other
 // languages? And when you do, what does its performance look like?
 
-use std::io::{self, Write};
+use std::io::{self, BufWriter, Write};
 
 use bstr::{io::BufReadExt, BStr, BString, ByteSlice};
-use fxhash::{FxHashMap as HashMap};
+use fxhash::FxHashMap as HashMap;
 
 fn main() {
     // Rust blocks the broken pipe signal by default, and instead returns it as
@@ -56,8 +56,10 @@ fn try_main() -> anyhow::Result<()> {
     let mut ordered: Vec<_> = counts.into_iter().collect();
     ordered.sort_unstable_by_key(|&(_, count)| count);
 
+    let stdout = io::stdout();
+    let mut stdout = BufWriter::new(stdout.lock());
     for (word, count) in ordered.into_iter().rev() {
-        writeln!(io::stdout(), "{} {}", word, count)?;
+        writeln!(stdout, "{} {}", word, count)?;
     }
     Ok(())
 }

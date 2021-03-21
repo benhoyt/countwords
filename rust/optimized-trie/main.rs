@@ -20,7 +20,7 @@
 use std::{
     convert::TryFrom,
     error::Error,
-    io::{self, Read, Write},
+    io::{self, BufWriter, Read, Write},
 };
 
 fn main() {
@@ -35,7 +35,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut stdin = stdin.lock();
     let mut counts = Trie::new();
 
-    let mut buf = vec![0; 64 * (1<<10)];
+    let mut buf = vec![0; 64 * (1 << 10)];
     let mut node_id = counts.root();
     loop {
         let nread = stdin.read(&mut buf)?;
@@ -66,8 +66,10 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut ordered = counts.frequencies();
     ordered.sort_unstable_by_key(|&(_, count)| count);
 
+    let stdout = io::stdout();
+    let mut stdout = BufWriter::new(stdout.lock());
     for (word, count) in ordered.into_iter().rev() {
-        writeln!(io::stdout(), "{} {}", std::str::from_utf8(&word)?, count)?;
+        writeln!(stdout, "{} {}", std::str::from_utf8(&word)?, count)?;
     }
     Ok(())
 }
@@ -138,7 +140,10 @@ struct TrieNode<'a> {
 impl Trie {
     /// Create a new empty trie.
     fn new() -> Trie {
-        let mut trie = Trie { nodes: vec![], counts: vec![] };
+        let mut trie = Trie {
+            nodes: vec![],
+            counts: vec![],
+        };
         // add dummy node with id==0. This is never used. We explicitly add it
         // to avoid needing to subtract 1 on every node lookup. The root starts
         // at id==1.
@@ -205,7 +210,10 @@ impl Trie {
         let count = self.counts[id.get() as usize / NODE_SIZE];
         let start = id.get() as usize;
         let end = start + NODE_SIZE;
-        TrieNode { children: &self.nodes[start..end], count }
+        TrieNode {
+            children: &self.nodes[start..end],
+            count,
+        }
     }
 
     fn frequencies(&self) -> Vec<(Vec<u8>, u32)> {
@@ -215,7 +223,10 @@ impl Trie {
         }
 
         let byte = self.node(self.root()).next_child(0);
-        let mut stack = vec![NodeWithChild { id: self.root(), byte }];
+        let mut stack = vec![NodeWithChild {
+            id: self.root(),
+            byte,
+        }];
         let mut word = vec![];
         let mut freqs = vec![];
 
@@ -226,7 +237,8 @@ impl Trie {
                 continue;
             }
             stack.push(NodeWithChild {
-                id, byte: node.next_child(byte + 1),
+                id,
+                byte: node.next_child(byte + 1),
             });
 
             // This unwrap is correct because we only ever push non-empty

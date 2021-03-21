@@ -1,24 +1,14 @@
-// This version is an approximate port of the optimized Go program. Its buffer
-// handling is slightly simpler: we don't bother with dealing with the last
-// newline character. (This may appear to save work, but it only saves work
-// once per 64KB buffer, so is likely negligible. It's just simpler IMO.)
+// This version is similar to optimized except it uses arena to store the
+// keys rather than having separate allocation for each new key.
 //
-// There's nothing particularly interesting here other than swapping out std's
-// default hashing algorithm for one that isn't cryptographically secure.
+// It would have similar results if one uses bumpalo or typed-arena, we
+// just didn't use any libraries here, or maybe this one could be slightly
+// faster because it uses Cell instead of RefCell.
 
-use std::{
-    error::Error,
-    io::{self, Read, Write},
-};
+use std::cell::Cell;
+use std::error::Error;
+use std::io::{self, BufWriter, Read, Write};
 
-// std uses a cryptographically secure hashing algorithm by default, which is
-// a bit slower. In this particular program, fxhash and fnv seem to perform
-// similarly, with fxhash being a touch faster in my ad hoc benchmarks. If
-// we wanted to really enforce the "no external crate" rule, we could just
-// hand-roll an fnv hash impl ourselves very easily.
-//
-// N.B. This crate brings in a new hashing function. We still use std's hashmap
-// implementation.
 use fxhash::FxHashMap as HashMap;
 
 fn main() {
@@ -31,7 +21,8 @@ fn main() {
 fn try_main() -> Result<(), Box<dyn Error>> {
     let stdin = io::stdin();
     let mut stdin = stdin.lock();
-    let mut counts: HashMap<Vec<u8>, u64> = HashMap::default();
+    let keys = Cell::new(Vec::with_capacity(256 * 1024)); // more than enough
+    let mut counts: HashMap<&[u8], u64> = HashMap::default();
     let mut buf = vec![0; 64 * (1 << 10)];
     let mut offset = 0;
     let mut start = None;
@@ -39,7 +30,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
         let nread = stdin.read(&mut buf[offset..])?;
         if nread == 0 {
             if offset > 0 {
-                increment(&mut counts, &buf[..offset + 1]);
+                increment(&keys, &mut counts, &buf[..offset + 1]);
             }
             break;
         }
@@ -52,7 +43,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
             }
             if b == b' ' || b == b'\n' {
                 if let Some(start) = start.take() {
-                    increment(&mut counts, &buf[start..i]);
+                    increment(&keys, &mut counts, &buf[start..i]);
                 }
             } else if start.is_none() {
                 start = Some(i);
@@ -70,13 +61,15 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut ordered: Vec<_> = counts.into_iter().collect();
     ordered.sort_unstable_by_key(|&(_, count)| count);
 
+    let stdout = io::stdout();
+    let mut stdout = BufWriter::new(stdout.lock());
     for (word, count) in ordered.into_iter().rev() {
-        writeln!(io::stdout(), "{} {}", std::str::from_utf8(&word)?, count)?;
+        writeln!(stdout, "{} {}", std::str::from_utf8(&word)?, count)?;
     }
     Ok(())
 }
 
-fn increment(counts: &mut HashMap<Vec<u8>, u64>, word: &[u8]) {
+fn increment<'a>(keys_outer: &'a Cell<Vec<u8>>, counts: &mut HashMap<&'a [u8], u64>, word: &[u8]) {
     // using 'counts.entry' would be more idiomatic here, but doing so requires
     // allocating a new Vec<u8> because of its API. Instead, we do two hash
     // lookups, but in the exceptionally common case (we see a word we've
@@ -85,5 +78,15 @@ fn increment(counts: &mut HashMap<Vec<u8>, u64>, word: &[u8]) {
         *count += 1;
         return;
     }
-    counts.insert(word.to_vec(), 1);
+    // store keys in another buffer to avoid unnecessary allocation for each key
+    let mut keys = keys_outer.take();
+    let start = keys.len();
+    // make sure if never gets larger than the keys buffer, if it reallocate the memory,
+    // the key references may be pointing to the wrong address
+    assert!(keys.len() + word.len() <= keys.capacity());
+    keys.extend_from_slice(word);
+    // Safety: extend the lifetime of keys since are reusing the same buffer like an arena
+    let word: &'a [u8] = unsafe { std::mem::transmute(&keys[start..start + word.len()]) };
+    counts.insert(word, 1);
+    keys_outer.set(keys); // store it back
 }

@@ -1,0 +1,15 @@
+[package]
+name = "optimized"
+version = "0.1.0"
+authors = ["Andrew Gallant <jamslam@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "countwords"
+path = "main.rs"
+
+[dependencies]
+fxhash = "0.2.1"
+
+[profile.release]
+debug = true
