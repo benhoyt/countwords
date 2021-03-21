@@ -26,6 +26,7 @@ optimized.cmx
 optimized.o
 simple-kotlin.jar
 simple-zig
+optimized-zig
 zig-cache
 /.idea
 java/*.class
