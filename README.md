@@ -33,6 +33,7 @@ Thanks to these contributors for additional language versions:
 * Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)
 * Rust: [Andrew Gallant](https://github.com/BurntSushi)
 * Swift: [Daniel Müllenborn](https://github.com/damuellen)
+* Tcl: [William Ross](https://github.com/arideden)
 * Zig: [ifreund](https://github.com/ifreund) and [matu3ba](https://github.com/matu3ba) and [ansingh](https://github.com/ansingh)
 
 See other versions [on Rosetta Code](https://rosettacode.org/wiki/Word_frequency).
