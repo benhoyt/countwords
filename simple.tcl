@@ -7,7 +7,7 @@ while {[gets stdin data] >= 0} {
 }
 # Remove the count of null elements resulting from the split function
 # being applied to consecutive whitespace in the input
-unset table()
+catch {unset table()} err
 foreach {word count} [lsort -decreasing -integer -index 1 -stride 2 [array get table]] {
   puts "$word $count"
 }
