@@ -46,6 +46,7 @@ programs = [
     ('Java', 'java -server -cp ./java simple', 'java -server -cp ./java optimized', 'by Iulian Plesoianu'),
     ('Zig', './simple-zig', './optimized-zig', 'by ifreund and matu3ba and ansingh'),
     ('Common Lisp', './simple-cl', None, 'by Brad Svercl'),
+    ('Tcl', 'tclsh simple.tcl', None, 'by William Ross'),
 ]
 
 times = []
