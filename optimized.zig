@@ -1,6 +1,6 @@
 const std = @import("std");
 const hash_map = std.hash_map;
-const murmur = std.hash.murmur;
+const fnv = std.hash.fnv;
 const WordMap = std.HashMap([]const u8, u32, hashString, hash_map.eqlString, 80);
 
 pub fn main() !void {
@@ -19,6 +19,9 @@ pub fn main() !void {
         buf[numread + 1] = 'a';
         buf[numread + 2] = ' ';
 
+        // can't have more than 1/2 the total chars as words
+        try words.ensureCapacity(words.count() + @intCast(u32, numread >> 1));
+
         // find words and count them
         var wstart: usize = 0;
         while (true) {
@@ -31,7 +34,7 @@ pub fn main() !void {
             if (wend >= numread) break;
 
             const word = buf[wstart..wend];
-            const ret = try words.getOrPut(word);
+            const ret = words.getOrPutAssumeCapacity(word);
             if (ret.found_existing) {
                 ret.entry.value += 1;
             } else {
@@ -76,5 +79,5 @@ fn compare(_: void, a: WordMap.Entry, b: WordMap.Entry) bool {
 }
 
 pub fn hashString(s: []const u8) u64 {
-    return std.hash.Murmur2_32.hash(s);
+    return std.hash.Fnv1a_32.hash(s);
 }
