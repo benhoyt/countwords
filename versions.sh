@@ -30,6 +30,7 @@ kotlinc -version 2>&1 | grep 'info:' >>versions.txt
 javac -version >>versions.txt
 echo -n 'Zig: ' >>versions.txt && zig version >>versions.txt
 sbcl --version >>versions.txt
+echo 'puts "Tcl: [info patchlevel]"' | tclsh >> versions.txt
 
 echo "For some reason gforth --version doesn't redirect! Append this to versions.txt manually:"
 ../gforth/gforth-fast --version 2>&1 >>versions.txt
