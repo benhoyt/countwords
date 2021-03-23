@@ -234,3 +234,7 @@ git diff --exit-code output.txt
 echo Tcl simple
 tclsh simple.tcl <kjvbible_x10.txt | python3 normalize.py >output.txt
 git diff --exit-code output.txt
+
+echo Haxe simple
+haxe -main Simple --interp <kjvbible_x10.txt | python3 normalize.py >output.txt
+git diff --exit-code output.txt

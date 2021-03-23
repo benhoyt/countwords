@@ -21,6 +21,7 @@ Thanks to these contributors for additional language versions:
 * D: [Ross Lonstein](https://github.com/rlonstein)
 * F#: [Yuriy Ostapenko](https://github.com/uncleyo)
 * Go: [Miguel Angel](https://github.com/ntrrg) - simplifying the Go optimized version; [Joshua Corbin](https://github.com/jcorbin) - adding a [parallel Go version](https://github.com/benhoyt/countwords/blob/9db2ab6808921e649fc5212c00712e61edf6fa1c/parallel.go) for demonstration
+* Haxe: [Osman Turan](https://github.com/osman-turan)
 * Java: [Iulian Pleșoianu](https://github.com/bit-twit)
 * JavaScript: [Dani Biró](https://github.com/Daninet) and [Flo Hinze](https://github.com/laubsauger)
 * Julia: [Alessandro Melis](https://github.com/alemelis)

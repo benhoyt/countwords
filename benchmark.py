@@ -48,6 +48,7 @@ programs = [
     ('Common Lisp', './simple-cl', None, 'by Brad Svercl'),
     ('Pascal', './simple-pas', None, 'by Osman Turan'),
     ('Tcl', 'tclsh simple.tcl', None, 'by William Ross'),
+    ('Haxe', 'haxe -main Simple --interp', None, 'by Osman Turan'),
 ]
 
 times = []
