@@ -28,6 +28,7 @@ Thanks to these contributors for additional language versions:
 * Lua: [Flemming Madsen](https://github.com/themadsens)
 * Nim: [csterritt](https://github.com/csterritt) and [euantorano](https://github.com/euantorano)
 * OCaml: [doesntgolf](https://github.com/doesntgolf)
+* Pascal: [Osman Turan](https://github.com/osman-turan)
 * Perl: [Charles Randall](https://github.com/charles-randall)
 * PHP: [Max Semenik](https://github.com/MaxSem)
 * Ruby: [Bill Mill](https://github.com/llimllib), with input from [Niklas](https://github.com/nhh)

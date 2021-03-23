@@ -26,4 +26,6 @@ info: kotlinc-jvm 1.4.31 (JRE 14.0.2+12-Ubuntu-120.04)
 javac 14.0.2
 Zig: 0.7.1
 SBCL 2.0.1.debian
+Pascal: 3.2.0
+Tcl: 8.6.10
 gforth 0.7.9_20210218 amd64
