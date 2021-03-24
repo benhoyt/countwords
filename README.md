@@ -1,6 +1,16 @@
 
 Playing with counting word frequencies (and the performance thereof) in various languages. See the full article for context and background: [https://benhoyt.com/writings/count-words/](https://benhoyt.com/writings/count-words/)
 
+
+## NOTE
+
+I received dozens of pull requests when my [count-words article](https://benhoyt.com/writings/count-words/) first came out, almost to the point where I couldn't keep up with them. Thanks for all the submissions!
+
+However, I'm **not taking new submissions anymore,** due mainly to the amount of time I've spent on this already. The major languages are there, and many minor ones. However, I'm still open to receiving feedback -- you can either email me (via the email address on my website) or open an issue here. Thanks!
+
+
+## To run the benchmarks
+
 To run the tests and benchmarks (you'll need Go, Rust, Python 3, AWK and perhaps other tools installed). Only tested on Linux:
 
 ```bash
@@ -9,6 +19,9 @@ To run the tests and benchmarks (you'll need Go, Rust, Python 3, AWK and perhaps
 ```
 
 For the latest results (run on my machine against these [versions](https://github.com/benhoyt/countwords/blob/master/versions.txt)), see the article's [performance results section](https://benhoyt.com/writings/count-words/#performance-results-and-learnings).
+
+
+## Credits
 
 Thanks to these contributors for additional language versions:
 
