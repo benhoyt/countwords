@@ -54,10 +54,11 @@ table<(1<<16), (1<<19)> counts;
 int main() {
   std::ios::sync_with_stdio(false);
   auto to_lower = [](unsigned char c) { return c | (-(c-'A' < 26) & '\x20'); };
-  for (std::istreambuf_iterator<char> it(std::cin), end; it != end; ++it) {
-    if (*it <= ' ') {
+  std::streambuf& in = *std::cin.rdbuf();
+  for (int c; (c = in.sbumpc()) != EOF;) {
+    if (unsigned(c) <= ' ') {
       counts.count_one();
-    } else counts.push(to_lower(*it));
+    } else counts.push(to_lower(c));
   }
   counts.count_one(); // in case file ends without whitespace
   counts.dump(std::cout);
