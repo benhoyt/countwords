@@ -106,7 +106,7 @@ int main() {
             int start = i;
             for (; i < num_process; i++) {
                 char c = buf[i];
-                if (c <= ' ') {
+                if (c <= ' ' || c == '\n') {
                     break;
                 }
                 if (c >= 'A' && c <= 'Z') {
