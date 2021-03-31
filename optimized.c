@@ -77,7 +77,7 @@ int main() {
     while (1) {
         // Read file in chunks, processing one chunk at a time.
         size_t num_read = fread(buf+offset, 1, BUF_SIZE-offset, stdin);
-        if (num_read == 0) {
+        if (num_read+offset == 0) {
             break;
         }
 
