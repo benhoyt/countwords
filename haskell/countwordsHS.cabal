@@ -1,0 +1,67 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: ba84b0b3a3ffe97ffb2f39efda67d3bedd3468ec37a70fd728bd66a9de34c677
+
+name:           countwordsHS
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/countwordsHS#readme>
+homepage:       https://github.com/githubuser/countwordsHS#readme
+bug-reports:    https://github.com/githubuser/countwordsHS/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2021 Author name here
+license:        BSD3
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/countwordsHS
+
+library
+  exposed-modules:
+      CountWords
+  other-modules:
+      Paths_countwordsHS
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , text
+    , unordered-containers
+  default-language: Haskell2010
+
+executable simple-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_countwordsHS
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -O2
+  build-depends:
+      base >=4.7 && <5
+    , countwordsHS
+    , text
+    , unordered-containers
+  default-language: Haskell2010
+
+test-suite simple-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_countwordsHS
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , simple
+    , text
+    , unordered-containers
+  default-language: Haskell2010
