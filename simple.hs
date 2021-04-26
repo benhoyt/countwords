@@ -9,13 +9,6 @@ import           Data.Ord                   (Down (..))
 import qualified Data.Text                  as T
 import qualified Data.Text.IO               as TIO
 
-countwords :: [T.Text] -> [(T.Text, Int)]
-countwords = go HMS.empty 
-    where
-    go mmap [] = sortOn (Down . snd) . HMS.toList $ mmap
-    go mmap (x:xs) = let w = T.append (T.toLower x) " " in case HMS.lookup w mmap of
-        Nothing -> go (HMS.insert w 1 mmap) xs
-        Just v  -> go (HMS.insertWith (\_ _ -> v + 1) w v mmap) xs
+countwords = sortOn (Down . snd) . HMS.toList . HMS.fromListWith (+) . map (\w -> (T.toLower w, 1))
 
-runCountwords :: IO ()
-runCountwords = TIO.getContents >>= traverse_ (\(w,i) -> TIO.putStrLn $ w `T.append` (T.pack . show $ i)) . countwords . T.words
+runCountwords = TIO.getContents >>= traverse_ (\(w,i) -> TIO.putStrLn $ w `T.append` " " `T.append` (T.pack . show $ i)) . countwords . T.words
