@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ba84b0b3a3ffe97ffb2f39efda67d3bedd3468ec37a70fd728bd66a9de34c677
+-- hash: ae67428ee6ac2827fdfac43bc518b8ee8d010564811756723dc523e55400d1c7
 
 name:           countwordsHS
 version:        0.1.0.0
@@ -33,8 +33,8 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , containers
     , text
-    , unordered-containers
   default-language: Haskell2010
 
 executable simple-exe
@@ -46,9 +46,9 @@ executable simple-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:
       base >=4.7 && <5
+    , containers
     , countwordsHS
     , text
-    , unordered-containers
   default-language: Haskell2010
 
 test-suite simple-test
@@ -61,7 +61,7 @@ test-suite simple-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers
     , simple
     , text
-    , unordered-containers
   default-language: Haskell2010

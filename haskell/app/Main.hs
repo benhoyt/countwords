@@ -1,5 +1,6 @@
 module Main where
 
-import           CountWords         (runCountwords)
+import           CountWords (runCountWords)
 
-main = runCountwords
+main :: IO ()
+main = runCountWords
