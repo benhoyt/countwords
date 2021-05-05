@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module CountWords where
@@ -18,7 +17,7 @@ countwords = foldl' (\m k -> M.insertWith (+) k 1 m) M.empty
 
 runCountWords :: IO ()
 runCountWords =
-    T.getContents >>= T.putStrLn
+    T.getContents >>= T.putStr
         . T.unlines
         . map (\(w, i) -> w `T.append` " " `T.append` (T.pack . show $ i))
         . sortBy (comparing (Down . snd))
