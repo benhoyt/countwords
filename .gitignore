@@ -32,3 +32,6 @@ zig-cache
 java/*.class
 simple-cl
 simple-pas
+haskell/.stack-work/
+haskell/simple-exe
+haskell/stack.yaml.lock

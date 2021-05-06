@@ -31,7 +31,8 @@ javac -version >>versions.txt
 echo -n 'Zig: ' >>versions.txt && zig version >>versions.txt
 sbcl --version >>versions.txt
 echo -n 'Pascal: ' >>versions.txt && fpc -iW >>versions.txt
-echo 'puts "Tcl: [info patchlevel]"' | tclsh >> versions.txt
+echo 'puts "Tcl: [info patchlevel]"' | tclsh >>versions.txt
+echo -n 'Haskell: ' >>versions.txt && stack --version >>versions.txt
 
 echo "For some reason gforth --version doesn't redirect! Append this to versions.txt manually:"
 ../gforth/gforth-fast --version 2>&1 >>versions.txt

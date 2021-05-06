@@ -28,4 +28,5 @@ Zig: 0.7.1
 SBCL 2.0.1.debian
 Pascal: 3.2.0
 Tcl: 8.6.10
+Haskell: Version 2.5.1, Git revision d6ab861544918185236cf826cb2028abb266d6d5 x86_64 hpack-0.33.0
 gforth 0.7.9_20210218 amd64
