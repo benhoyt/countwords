@@ -8,7 +8,7 @@
 
 use std::{
     error::Error,
-    io::{self, Read, Write, BufWriter},
+    io::{self, BufWriter, Read, Write},
 };
 
 // std uses a cryptographically secure hashing algorithm by default, which is
@@ -38,20 +38,20 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut out_buffer = BufWriter::new(io::stdout());
 
     loop {
-        let nread = stdin.read(&mut buf[offset..])?;
-        
-        if nread == 0 {
+        let n_read = stdin.read(&mut buf[offset..])?;
+
+        if n_read == 0 {
             if offset > 0 {
                 increment(&mut counts, &buf[..offset + 1]);
             }
             break;
         }
-        
-        let buf = &mut buf[..offset + nread];
+
+        let buf = &mut buf[..offset + n_read];
 
         (0..buf.len()).skip(offset).for_each(|i| {
             let b = buf[i];
-            if b'A' <= b && b <= b'Z' {
+            if (b'A'..=b'Z').contains(&b) {
                 buf[i] += b'a' - b'A';
             }
             if b == b' ' || b == b'\n' {
@@ -62,7 +62,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
                 start = Some(i);
             }
         });
-        
+
         if let Some(ref mut start) = start {
             offset = buf.len() - *start;
             buf.copy_within(*start.., 0);
@@ -74,19 +74,17 @@ fn try_main() -> Result<(), Box<dyn Error>> {
 
     let mut ordered: Vec<_> = counts.into_iter().collect();
     ordered.sort_unstable_by_key(|&(_, count)| count);
-    
-    let res = ordered.into_iter().rev().try_for_each( |(word, count)|
-        match std::str::from_utf8(&word) {
-            Ok(word_str) => {
-                match writeln!(out_buffer, "{} {}", word_str, count) {
-                    Ok(_) => Ok(()),
-                    Err(e) => Err(Box::new(e).into()),
-                }
+
+    ordered
+        .into_iter()
+        .rev()
+        .try_for_each(|(word, count)| match std::str::from_utf8(&word) {
+            Ok(word_str) => match writeln!(out_buffer, "{} {}", word_str, count) {
+                Ok(_) => Ok(()),
+                Err(e) => Err(Box::new(e).into()),
             },
             Err(e) => Err(Box::new(e).into()),
-        });
-
-    res
+        })
 }
 
 fn increment(counts: &mut HashMap<Vec<u8>, u64>, word: &[u8]) {
