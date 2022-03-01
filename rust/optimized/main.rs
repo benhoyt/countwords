@@ -8,7 +8,7 @@
 
 use std::{
     error::Error,
-    io::{self, Read, Write},
+    io::{self, Read, Write, BufWriter},
 };
 
 // std uses a cryptographically secure hashing algorithm by default, which is
@@ -35,17 +35,21 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut buf = vec![0; 64 * (1 << 10)];
     let mut offset = 0;
     let mut start = None;
+    let mut out_buffer = BufWriter::new(io::stdout());
+
     loop {
         let nread = stdin.read(&mut buf[offset..])?;
+        
         if nread == 0 {
             if offset > 0 {
                 increment(&mut counts, &buf[..offset + 1]);
             }
             break;
         }
+        
         let buf = &mut buf[..offset + nread];
 
-        for i in (0..buf.len()).skip(offset) {
+        (0..buf.len()).skip(offset).for_each(|i| {
             let b = buf[i];
             if b'A' <= b && b <= b'Z' {
                 buf[i] += b'a' - b'A';
@@ -57,7 +61,8 @@ fn try_main() -> Result<(), Box<dyn Error>> {
             } else if start.is_none() {
                 start = Some(i);
             }
-        }
+        });
+        
         if let Some(ref mut start) = start {
             offset = buf.len() - *start;
             buf.copy_within(*start.., 0);
@@ -69,11 +74,16 @@ fn try_main() -> Result<(), Box<dyn Error>> {
 
     let mut ordered: Vec<_> = counts.into_iter().collect();
     ordered.sort_unstable_by_key(|&(_, count)| count);
+    
+    let res = ordered.into_iter().rev().try_for_each( |(word, count)|
+        writeln!(out_buffer, "{} {}", std::str::from_utf8(&word).unwrap(), count)
+    );
 
-    for (word, count) in ordered.into_iter().rev() {
-        writeln!(io::stdout(), "{} {}", std::str::from_utf8(&word)?, count)?;
+    if let Err(e) = res {
+        Err(Box::new(e))
+    } else {
+        Ok(())
     }
-    Ok(())
 }
 
 fn increment(counts: &mut HashMap<Vec<u8>, u64>, word: &[u8]) {
