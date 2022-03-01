@@ -8,7 +8,7 @@
 
 use std::{
     error::Error,
-    io::{self, Read, Write},
+    io::{self, Read, Write, BufWriter},
 };
 
 // std uses a cryptographically secure hashing algorithm by default, which is
@@ -35,6 +35,8 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     let mut buf = vec![0; 64 * (1 << 10)];
     let mut offset = 0;
     let mut start = None;
+    let mut buffer = BufWriter::new(io::stdout());
+
     loop {
         let nread = stdin.read(&mut buf[offset..])?;
         if nread == 0 {
@@ -71,7 +73,7 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     ordered.sort_unstable_by_key(|&(_, count)| count);
 
     for (word, count) in ordered.into_iter().rev() {
-        writeln!(io::stdout(), "{} {}", std::str::from_utf8(&word)?, count)?;
+        writeln!(buffer, "{} {}", std::str::from_utf8(&word)?, count)?;
     }
     Ok(())
 }
