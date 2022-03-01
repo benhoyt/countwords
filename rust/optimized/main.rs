@@ -76,14 +76,17 @@ fn try_main() -> Result<(), Box<dyn Error>> {
     ordered.sort_unstable_by_key(|&(_, count)| count);
     
     let res = ordered.into_iter().rev().try_for_each( |(word, count)|
-        writeln!(out_buffer, "{} {}", std::str::from_utf8(&word).unwrap(), count)
-    );
+        match std::str::from_utf8(&word) {
+            Ok(word_str) => {
+                match writeln!(out_buffer, "{} {}", word_str, count) {
+                    Ok(_) => Ok(()),
+                    Err(e) => Err(Box::new(e).into()),
+                }
+            },
+            Err(e) => Err(Box::new(e).into()),
+        });
 
-    if let Err(e) = res {
-        Err(Box::new(e))
-    } else {
-        Ok(())
-    }
+    res
 }
 
 fn increment(counts: &mut HashMap<Vec<u8>, u64>, word: &[u8]) {
